@@ -5,4 +5,4 @@ Hello everyone. Welcome to the dream team. You are probably wondering why I have
 will work hard to create the best snake game to ever exist. 
 
 
-<img src="http://vignette2.wikia.nocookie.net/harrypotter/images/1/16/Harry-Snake-PSF.png/revision/latest?cb=20131023143203" alt="Rigid Logo" style="width:150;height:150;">
+<img src="http://www.californiaherps.com/films/filmimages/harrypotter3.jpg" alt="I'm a snaake" style="width:150;height:150;">
