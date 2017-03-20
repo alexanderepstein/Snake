@@ -28,8 +28,21 @@ extern volatile int timeout;					// used to synchronize with the timer
 void drawpixel(int x_vga, int y_vga, short color){
 	volatile short *pixel_address = (volatile short*)(0x08000000 + (y_vga<<10) + (x_vga<<1)); 
     *pixel_address = color;
+	//TODO double buffer
 }
 
+/**
+  * Function for constructing the wall perimeters in the game. Snake dies upon collision with these.
+  */
+void buildWall(short color){
+	for (int x =0; x <= 319; x++){
+		for (int y =0; y <= 239; y++){
+			if (x == 0 || x == 319 || y ==0 || y == 239){
+				drawpixel(x,y,color);
+			}
+		}
+	}
+}
 
 
 /* Paint the screen BLACK 
