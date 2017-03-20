@@ -15,14 +15,12 @@ volatile struct Node{
 //setting up head here
 volatile struct Snake *head = malloc(sizeof(Snake);
 
-
-
+/**
+ * Function that handles inserting a link to the snake. Please note we do not wish to move the entire snake (list of nodes).
+ * Insead, we just advance the head up one and then insert a new link behind the head of the snake.
+ */
 void insertLink(struct Snake *currentLink){
-	/*while (currentLink->next !=0){
-		currentLink = currentLink->next;
-	}*/
-	//at this point I've reached the end so I add a new guy.
-	//ACTUALLY INSERTING NEW GUY DIRECTLY AFTER HEAD
+	//INSERTING NEW GUY DIRECTLY AFTER HEAD. efficiency reasons
 	struct Node *newNode = malloc(sizeof(Node));
 	newNode->previous = currentLink; //new guy points back
 	newNode->next = currentLink->next; //new guy says the next thing is the link after the head
@@ -46,6 +44,11 @@ void insertLink(struct Snake *currentLink){
 	
 }
 
+/**
+ * Function responsible for advancing the snakes position. Please note we do not wish to move the entire snake (list of nodes).
+ * Insead, we advance the head up one then slide the tail up behind the head. Effectively the head moves up one and last link becomes the new second 
+ * link while the rest of the snake remains stationary.
+ */
 void move(struct Snake *currentLink){
 	while (currentLink->next !=0){
 		currentLink = currentLink->next;
