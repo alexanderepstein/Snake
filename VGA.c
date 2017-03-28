@@ -10,7 +10,7 @@
 */
 
 
-/* these globals are written by interrupt service routines; we have to declare 
+/* these globals are written by interrupt service routines; we have to declare
  * these as volatile to avoid the compiler caching their values in registers */
 extern volatile char byte1, byte2;			/* modified by PS/2 interrupt service routine */
 extern volatile int timeout;					// used to synchronize with the timer
@@ -26,7 +26,7 @@ extern volatile int timeout;					// used to synchronize with the timer
 */
 
 void drawpixel(int x_vga, int y_vga, short color){
-	volatile short *pixel_address = (volatile short*)(0x08000000 + (y_vga<<10) + (x_vga<<1)); 
+	volatile short *pixel_address = (volatile short*)(0x08000000 + (y_vga<<10) + (x_vga<<1));
     *pixel_address = color;
 	//TODO double buffer
 }
@@ -45,7 +45,7 @@ void buildWall(short color){
 }
 
 
-/* Paint the screen BLACK 
+/* Paint the screen BLACK
 * DE0 Limits x= 79,  y=59
 * DE0-CV	 x= 319, y=239
 */
@@ -67,31 +67,13 @@ void clearscreen (){
 }*/
 volatile int direction = -1;
 volatile int yPos = 120;
-int main(){	
-	
-	/* Declare volatile pointers to I/O registers (volatile means that IO load and store instructions
-	* will be used to access these pointer locations instead of regular memory loads and stores) */
-	volatile int * interval_timer_ptr = (int *) 0xFF202000; // interval timer base address
-	//volatile int * KEY_ptr = (int *) 0xFF200050; // pushbutton KEY address
-	/* set the interval timer period for scrolling the HEX displays */
-	int counter = 25000000; // (100 MHz) × (250ms)
-	*(interval_timer_ptr + 0x2) = (counter & 0xFFFF);
-	*(interval_timer_ptr + 0x3) = (counter >> 16) & 0xFFFF;
-	/* start interval timer, enable its interrupts */
-	*(interval_timer_ptr + 1) = 0x7; // STOP = 0, START = 1, CONT = 1, ITO = 1
-	//*(KEY_ptr + 2) = 0xF; /* write to the pushbutton interrupt mask register, and
-	//* set mask bits to 1 */
-	NIOS2_WRITE_IENABLE( 0x3 ); /* set interrupt mask bits for levels 0 (interval timer) technically I only need the interval timer
-	* and level 1 (pushbuttons) */
-	NIOS2_WRITE_STATUS( 1 ); // enable Nios II interrupts
-	while(1); // main program simply idles
-	
-	
+
+
 	/*while(1){
-	
+
 		clearscreen();
 		int x_max, y_max, x_start, y_start;
-		
+
 		/* Draw an orange horzontal line */
 	/*	for (x_max = 0; x_max < 319; x_max = x_max + 1){
 			drawpixel(x_max, yPos, 248);
