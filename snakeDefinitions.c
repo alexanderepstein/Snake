@@ -1,5 +1,6 @@
 #include <stdlib.h>
 
+short color = 0b0000011111100000;
 
 struct Node{
 	int xPosition;
@@ -16,7 +17,7 @@ struct Snake{
 //setting up head here
 extern struct Snake *head;
 
-void initi(){
+void init(){
 	 head = malloc(sizeof(struct Snake));
 }
 
@@ -46,6 +47,7 @@ void insertLink(struct Snake *currentLink){
 		//NOTE A NEGATIVE Y IS TECHNICALLY UP
 		currentLink->firstNode->yPosition = currentLink->firstNode->yPosition - 1;
 	}
+	drawpixel(currentLink->firstNode-xPosition, currentLink->firstNode-yPosition, color)
 }
 
 /**
@@ -59,6 +61,7 @@ void move(struct Snake *top){
 		currentLink = currentLink->next;
 	}
 	//at this point I have reached the end of the list
+	drawpixel(currentLink->xPosition, currentLink->yPosition, 0x0); //set the tail to be uncolored
 	currentLink->xPosition = top->firstNode->xPosition;
 	currentLink->yPosition = top->firstNode->yPosition;
 	
@@ -79,6 +82,7 @@ void move(struct Snake *top){
 		//NOTE A NEGATIVE Y IS TECHNICALLY UP
 		top->firstNode->yPosition = top->firstNode->yPosition - 1;
 	}
+	drawpixel(top->firstNode->xPosition, top->firstNode->yPosition, 0b0000011111100000, color); //color the new position
 }
 
 /**
