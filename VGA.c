@@ -68,21 +68,3 @@ void clearscreen (){
 volatile int direction = -1;
 volatile int yPos = 120;
 
-
-	/*while(1){
-
-		clearscreen();
-		int x_max, y_max, x_start, y_start;
-
-		/* Draw an orange horzontal line */
-	/*	for (x_max = 0; x_max < 319; x_max = x_max + 1){
-			drawpixel(x_max, yPos, 248);
-		}
-		yPos = yPos + direction;
-		if (yPos == 239 || yPos == 0){
-			direction = direction * -1;
-		}
-	}
-	*/
-//	return 0;
-}

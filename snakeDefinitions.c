@@ -1,7 +1,14 @@
 #include <stdlib.h>
 
 short color = 0b0000011111100000;
+extern int direction;
 
+#if !defined(NEG_X) || !defined(POS_X) || !defined(NEG_Y) || !defined(POS_Y)
+	#define POS_X 1
+	#define NEG_X 2
+	#define POS_Y 3
+	#define NEG_Y 4
+#endif
 struct Node{
 	int xPosition;
 	int yPosition;
@@ -15,10 +22,17 @@ struct Snake{
 };
 
 //setting up head here
-extern struct Snake *head;
+volatile struct Snake *head;
 
 void init(){
 	 head = malloc(sizeof(struct Snake));
+	 //set up first node
+	 struct Node *firstNode = malloc(sizeof(struct Node));
+	 //set up starting positions and colors
+	 firstNode->xPosition = 50;
+	 firstNode->yPosition = 50;
+	 firstNode->color = color;
+	 head->firstNode = firstNode;
 }
 
 /**
@@ -47,7 +61,7 @@ void insertLink(struct Snake *currentLink){
 		//NOTE A NEGATIVE Y IS TECHNICALLY UP
 		currentLink->firstNode->yPosition = currentLink->firstNode->yPosition - 1;
 	}
-	drawpixel(currentLink->firstNode-xPosition, currentLink->firstNode-yPosition, color)
+	drawpixel(currentLink->firstNode->xPosition, currentLink->firstNode->yPosition, color);
 }
 
 /**
@@ -100,10 +114,10 @@ void move(struct Snake *top){
 	//check that there is something before it
 	while(currentLink->previous !=0){
 		temp = currentLink; //set temporary pointer
-		temp=currentLink->previous; //go back one
-		free currentLink; //delete the current one
+		temp = currentLink->previous; //go back one
+		free(currentLink); //delete the current one
 		currentLink = temp; //slide our tracking variable 
 	}
-	free currentLink; //last link
-	free top; //dump the pointer at the head of the snake
+	free(currentLink); //last link
+	free(top); //dump the pointer at the head of the snake
  }

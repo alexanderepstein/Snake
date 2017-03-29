@@ -1,8 +1,10 @@
 
-#define POS_X = 1
-#define NEG_X = 2
-#define POS_Y = 3
-#define NEG_Y = 4
+#if !defined(NEG_X) || !defined(POS_X) || !defined(NEG_Y) || !defined(POS_Y)
+	#define POS_X 1
+	#define NEG_X 2
+	#define POS_Y 3
+	#define NEG_Y 4
+#endif
 volatile int  currentDirection , start;
 /********************************************************************************
 * Pushbutton - Interrupt Service Routine
