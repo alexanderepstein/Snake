@@ -30,9 +30,9 @@ void init(){
 	 //set up first node
 	 struct Node *firstNode = malloc(sizeof(struct Node));
 	 //set up starting positions and colors
-	 firstNode->xPosition = 50;
-	 firstNode->yPosition = 50;
-	 firstNode->color = 0b0000000000011111;
+	 firstNode->xPosition = (317/2) + 1;
+	 firstNode->yPosition = (237/2) + 1;
+	 firstNode->color = (short) 0b1111100000000000;
 	 firstNode->next = 0;
 	 firstNode->previous = 0;
  	 head->firstNode = firstNode;
@@ -61,6 +61,8 @@ void insertLink(struct Snake *top){
 	newNode->xPosition = top->firstNode->xPosition;
 	newNode->yPosition = top->firstNode->yPosition;
 	
+	drawpixel(top->firstNode->xPosition, top->firstNode->yPosition, 0b0000011111100000, color); //color the old head position
+
 	//can do preincrement / decrement for efficiency later on
 	if (currentDirection == POS_X){
 		top->firstNode->xPosition = (top->firstNode->xPosition + 1); 
@@ -102,8 +104,12 @@ void move(struct Snake *top){
 		currentLink->next->previous = currentLink;
 		top->firstNode->next = currentLink; //set the firstNode's next to point to the second position
 	}
-
 	
+	//verify snake has more than 1 node for this color shift
+	if (top->firstNode->next != 0){
+		//recolor pixel at old head
+		drawpixel(top->firstNode->xPosition, top->firstNode->yPosition, 0b0000011111100000, color); //color the old head position
+	}
 	//can do preincrement / decrement for efficiency later on
 	if (currentDirection == POS_X){
 		top->firstNode->xPosition = top->firstNode->xPosition + 1; 
@@ -117,7 +123,7 @@ void move(struct Snake *top){
 		top->firstNode->yPosition = top->firstNode->yPosition - 1;
 	}
 	//draw the new head position
-	drawpixel(top->firstNode->xPosition, top->firstNode->yPosition, 0b0000011111100000, color); //color the new position
+	drawpixel(top->firstNode->xPosition, top->firstNode->yPosition, 0b1111100000000000, color); //color the new position
 
 }
 
