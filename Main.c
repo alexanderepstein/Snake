@@ -12,6 +12,8 @@ volatile int currentDirection = 1;
 volatile int yPos = 120;
 volatile int lastDirection =0;
 volatile int pause = 0;
+
+volatile int start = 0;
 /********************************************************************************
 * This program demonstrates use of interrupts in the DE0-CV Computer. It first starts the
 * interval timer with 33 msec timeouts, and then enables interrupts from the interval timer
@@ -43,5 +45,6 @@ NIOS2_WRITE_STATUS( 1 ); // enable Nios II interrupts
 clearscreen();
 buildWall(0b1111100000000000);
 init();
+
 while(1); // main program simply idles
 }

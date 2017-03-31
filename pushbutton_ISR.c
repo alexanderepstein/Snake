@@ -5,8 +5,9 @@
 	#define POS_Y 3
 	#define NEG_Y 4
 #endif
-volatile int  currentDirection , start;
+volatile int currentDirection;
 extern volatile struct Snake *head;
+extern volatile int start;
 
 /********************************************************************************
 * Pushbutton - Interrupt Service Routine
@@ -17,6 +18,7 @@ extern volatile struct Snake *head;
 void pushbutton_ISR( void ) {
 volatile int * KEY_ptr = (int *) 0xFF200050;
 int press;
+start =1;
 press = *(KEY_ptr + 3); // read the pushbutton interrupt register
 *(KEY_ptr + 3) = press; // clear the interrupt
 
@@ -26,7 +28,7 @@ if (press & 0x1) // KEY0
 	{
 	  currentDirection = 1;
 	  printf("First button \n");
-	
+
   }
 }
 else if (press & 0x2)
