@@ -8,6 +8,7 @@ void checktokillSnake(int x, int y){
 	
 	if(x<=0 || x>=319 || y<=0 || y>=239){
 		//kill snake
+		deleteSnake(head);
 	}
 	
 	int currentXvalueOfHead; 
@@ -35,6 +36,7 @@ void checktokillSnake(int x, int y){
 		//if the current node position equals the current positon of the snakes head, kill the snake
 		(if currentXvalueOfBody==currentXvalueOfHead || currentYvalueOfBody==currentYvalueOfHead){
 			//kill snake
+			deleteSnake(head);
 		}
 	}
 }
