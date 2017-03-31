@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 short color = 0b0000011111100000;
-const short foodColor = 0b11111111111000000; //yellow
+const short foodColor = (short) 0b11111111111000000; //yellow
 extern volatile int currentDirection;
 
 #if !defined(NEG_X) || !defined(POS_X) || !defined(NEG_Y) || !defined(POS_Y)
@@ -74,14 +74,7 @@ void insertLink(struct Snake *top){
 		top->firstNode->yPosition = (top->firstNode->yPosition - 1);
 	}
 	drawpixel(top->firstNode->xPosition, top->firstNode->yPosition, color);
-	struct Node *counting = top->firstNode;
-	int count = 0;
-	while (counting->next !=0){
-		printf("Count after adding new node %d\n", count);
-		count++;
-		counting = counting->next;
-	}
-	printf("Insert Link\n");
+	
 }
 
 /**
@@ -90,12 +83,8 @@ void insertLink(struct Snake *top){
  * link while the rest of the snake remains stationary.
  */
 void move(struct Snake *top){
-	int count =0;
-	printf("Move1 \n");
 	struct Node *currentLink = top->firstNode;
 	while (currentLink->next !=0){
-		printf("Running %d\n", count);
-		count++;
 		currentLink = currentLink->next;
 	}
 	//at this point I have reached the end of the list
@@ -107,7 +96,6 @@ void move(struct Snake *top){
 	//check to make sure we are not manipulating the head. I do not want to do these 
 	//manipulations to the head as it makes it circular. I DO NOT WANT THE LIST TO BE CIRCULAR
 	if (currentLink != top->firstNode){
-		printf("We're not trying to manipulate the head");
 		currentLink->previous->next = 0; //set the new tail
 		currentLink->previous = top->firstNode; //set the 2nd position's previous to point back to firstNode
 		currentLink->next = top->firstNode->next; //set the 2nd position to point to the third
@@ -129,7 +117,6 @@ void move(struct Snake *top){
 	}
 	//draw the new head position
 	drawpixel(top->firstNode->xPosition, top->firstNode->yPosition, 0b0000011111100000, color); //color the new position
-	printf("Move2 \n");
 
 }
 
@@ -137,7 +124,7 @@ void move(struct Snake *top){
  * Function for generating a 1x1 food pixel
  */
 void generateFood(struct Snake *top){
-	int conflict = 0;
+	int conflict = 1;
 	int foodXCoordinate;
 	int foodYCoordinate;
 	while (conflict){
@@ -145,7 +132,8 @@ void generateFood(struct Snake *top){
 		//plus 1 is for wall offset
 		foodXCoordinate = (rand() % 317) + 1;
 		foodYCoordinate = (rand() % 237) + 1;
-		
+			printf("Food positions are X: %d Y: %d spinning", foodXCoordinate, foodYCoordinate);
+
 		//check for conflicts
 		for (struct Node *temp = top->firstNode; temp->next != 0; temp = temp->next){
 			if (temp->xPosition == foodXCoordinate && temp->yPosition == foodYCoordinate){
