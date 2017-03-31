@@ -40,6 +40,7 @@ int counter = 60000000; // 1/(100 MHz) × (5000000) = 50 msec
 NIOS2_WRITE_IENABLE( 0x3 ); /* set interrupt mask bits for levels 0 (interval timer)
 * and level 1 (pushbuttons) */
 NIOS2_WRITE_STATUS( 1 ); // enable Nios II interrupts
+clearscreen();
 buildWall(0b1111100000000000);
 init();
 while(1); // main program simply idles
