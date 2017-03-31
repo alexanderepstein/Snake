@@ -99,6 +99,7 @@ void move(struct Snake *top){
 		currentLink->previous->next = 0; //set the new tail
 		currentLink->previous = top->firstNode; //set the 2nd position's previous to point back to firstNode
 		currentLink->next = top->firstNode->next; //set the 2nd position to point to the third
+		currentLink->next->previous = currentLink;
 		top->firstNode->next = currentLink; //set the firstNode's next to point to the second position
 	}
 
@@ -132,7 +133,6 @@ void generateFood(struct Snake *top){
 		//plus 1 is for wall offset
 		foodXCoordinate = (rand() % 317) + 1;
 		foodYCoordinate = (rand() % 237) + 1;
-			printf("Food positions are X: %d Y: %d spinning", foodXCoordinate, foodYCoordinate);
 
 		//check for conflicts
 		for (struct Node *temp = top->firstNode; temp->next != 0; temp = temp->next){
