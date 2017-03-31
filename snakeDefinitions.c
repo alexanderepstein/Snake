@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 short color = 0b0000011111100000;
+const short foodColor = 0b11111111111000000; //yellow
 extern volatile int currentDirection;
 
 #if !defined(NEG_X) || !defined(POS_X) || !defined(NEG_Y) || !defined(POS_Y)
@@ -118,6 +119,31 @@ void move(struct Snake *top){
 	}
 	//draw the new head position
 	drawpixel(top->firstNode->xPosition, top->firstNode->yPosition, 0b0000011111100000, color); //color the new position
+}
+
+/**
+ * Function for generating a 1x1 food pixel
+ */
+void generateFood(struct Snake *top){
+	int conflict = 0;
+	int foodXCoordinate;
+	int foodYCoordinate;
+	while (conflict){
+		conflict = 0;
+		//plus 1 is for wall offset
+		foodXCoordinate = (rand() % 317) + 1;
+		foodYCoordinate = (rand() % 237) + 1;
+		
+		//check for conflicts
+		for (struct Node *temp = top->firstNode; temp->next != 0; temp = temp->next){
+			if (temp->xPosition == foodXCoordinate && temp->yPosition == foodYCoordinate){
+				//conflict 
+				conflict = 1;
+				break;
+			}
+		}
+	}
+	drawpixel(foodXCoordinate,foodYCoordinate, foodColor);
 }
 
 /**
