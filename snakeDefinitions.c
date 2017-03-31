@@ -146,6 +146,11 @@ void generateFood(struct Snake *top){
 	drawpixel(foodXCoordinate,foodYCoordinate, foodColor);
 }
 
+/*
+void recolorHead(struct Snake *top){
+	drawpixel(top->firstNode->xPosition, top->firstNode->yPosition, 0b1111100000000000);
+}*/
+
 /**
  * Function for deleting all of the snake's dynamic memory.
  * Prventing leaks.

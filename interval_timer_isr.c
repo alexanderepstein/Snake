@@ -13,16 +13,19 @@ void interval_timer_isr(){
 
 	volatile int * interval_timer_ptr = (int *) 0xFF202000; // interval timer base address
 	*(interval_timer_ptr) = 0; // clear the interrupt
-if (!pushButtonThread)
-{
-
-	timerThread =1;
-	if (start)
+	if (!pushButtonThread && !timerThread)
 	{
-	  move(head);
-  }
 
-	timerThread = 0;
+		timerThread =1;
+		if (start)
+		{
+		  //insertLink(head);
+		  move(head);
+		  //recolorHead(head);
+		}
+
+		timerThread = 0;
+		return;
 
 	/*
 	if (start ==1)
@@ -36,5 +39,5 @@ if (!pushButtonThread)
 
 	//	clearscreen();
 
-}
+	}
 }

@@ -20,6 +20,7 @@ int press;
 ********************************************************************************/
 void pushbutton_ISR( void ) {
 start =1;
+volatile int * KEY_ptr = (int *) 0xFF200050;
 
 press= *(KEY_ptr + 3); // read the pushbutton interrupt register
 *(KEY_ptr + 3) = press; // clear the interrupt
@@ -28,52 +29,51 @@ press= *(KEY_ptr + 3); // read the pushbutton interrupt register
 
 if (!timerThread)
 {
-pushButtonThread = 1;
-
-volatile int * KEY_ptr = (int *) 0xFF200050;
+	pushButtonThread = 1;
 
 
 
 
-if (press & 0x1) // KEY0
-{
-	if (currentDirection != 2)
+
+	if (press & 0x1) // KEY0
 	{
-	  currentDirection = 1;
-	  printf("First button \n");
+		if (currentDirection != 2)
+		{
+		  currentDirection = 1;
+		  printf("First button \n");
 
-  }
-}
-else if (press & 0x2)
-{
-	if (currentDirection!= 1)
+	  }
+	}
+	else if (press & 0x2)
 	{
-	  currentDirection = 2;
-	  printf("Second button \n");
+		if (currentDirection!= 1)
+		{
+		  currentDirection = 2;
+		  printf("Second button \n");
 
-  }
-}
-else if (press & 0x4) //KEY 2
-{
-	if (currentDirection!= 4)
+	  }
+	}
+	else if (press & 0x4) //KEY 2
 	{
-	 currentDirection = 3;
-	 printf("Third button \n");
+		if (currentDirection!= 4)
+		{
+		 currentDirection = 3;
+		 printf("Third button \n");
 
-  }
-}
-else if(press & 0x8) //KEY 3
-{
-	if (currentDirection!= 3)
+	  }
+	}
+	else if(press & 0x8) //KEY 3
 	{
-  currentDirection = 4;
-  printf("Fourth button \n");
-	//insertLink(head);
+		if (currentDirection!= 3)
+		{
+		currentDirection = 4;
+		printf("Fourth button \n");
+		insertLink(head);
 
-  }
+	  }
 
-}
-pushButtonThread = 0;
+	}
+	pushButtonThread = 0;
 }
 return;
 
