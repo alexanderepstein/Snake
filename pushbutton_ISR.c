@@ -43,7 +43,7 @@ else if(press & 0x8) //KEY 3
   currentDirection = 4;
    printf("Fourth button \n");
 	insertLink(head);
-	move(head);
+	//move(head);
 }
 
 return;
