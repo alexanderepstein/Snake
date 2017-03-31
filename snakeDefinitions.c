@@ -117,6 +117,7 @@ void move(struct Snake *top){
 		currentLink->previous->next = 0; //set the new tail
 		currentLink->previous = top->firstNode; //set the 2nd position's previous to point back to firstNode
 		currentLink->next = top->firstNode->next; //set the 2nd position to point to the third
+		currentLink->next->previous = currentLink;   //set link originally following head to point backwards to new link
 		top->firstNode->next = currentLink; //set the firstNode's next to point to the second position
 
 	//	printf("Head: Previous: %d Next : %d Node Number \n", top->firstNode->previous, top->firstNode->next);
