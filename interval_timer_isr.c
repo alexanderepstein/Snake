@@ -13,6 +13,7 @@ void interval_timer_isr(){
 
 	volatile int * interval_timer_ptr = (int *) 0xFF202000; // interval timer base address
 	*(interval_timer_ptr) = 0; // clear the interrupt
+	move(head);
 	/*
 	if (start ==1)
 	{

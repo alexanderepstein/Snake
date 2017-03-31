@@ -26,7 +26,7 @@ if (press & 0x1) // KEY0
 	{
 	  currentDirection = 1;
 	  printf("First button \n");
-		move(head);
+	
   }
 }
 else if (press & 0x2)
@@ -35,7 +35,7 @@ else if (press & 0x2)
 	{
 	  currentDirection = 2;
 	  printf("Second button \n");
-		move(head);
+
   }
 }
 else if (press & 0x4) //KEY 2
@@ -44,7 +44,7 @@ else if (press & 0x4) //KEY 2
 	{
 	 currentDirection = 3;
 	 printf("Third button \n");
-	 move(head);
+
   }
 }
 else if(press & 0x8) //KEY 3
@@ -53,8 +53,8 @@ else if(press & 0x8) //KEY 3
 	{
   currentDirection = 4;
   printf("Fourth button \n");
-	insertLink(head);
-	move(head);
+	//insertLink(head);
+
   }
 
 }
