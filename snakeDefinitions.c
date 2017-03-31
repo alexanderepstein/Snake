@@ -31,10 +31,11 @@ void init(){
 	 //set up starting positions and colors
 	 firstNode->xPosition = 50;
 	 firstNode->yPosition = 50;
-	 firstNode->color = color;
-	 head->firstNode = firstNode;
+	 firstNode->color = 0b0000000000011111;
 	 firstNode->next = 0;
 	 firstNode->previous = 0;
+ 	 head->firstNode = firstNode;
+
 	 drawpixel(firstNode->xPosition, firstNode->yPosition, firstNode->color);
 	 printf("Initialization complete\n");
 }
@@ -86,13 +87,19 @@ void move(struct Snake *top){
 	}
 	//at this point I have reached the end of the list
 	drawpixel(currentLink->xPosition, currentLink->yPosition, 0x0); //set the tail to be uncolored
+	//advance position of tail to be where the head was
 	currentLink->xPosition = top->firstNode->xPosition;
 	currentLink->yPosition = top->firstNode->yPosition;
 	
-	currentLink->previous->next = 0; //set the new tail
-	currentLink->next = top->firstNode->next; //set the 2nd position to point to the third
-	currentLink->previous = top->firstNode; //set the 2nd position's previous to point back to firstNode
-	top->firstNode->next = currentLink; //set the firstNode's next to point to the second position
+	//check to make sure we are not manipulating the head. I do not want to do these 
+	//manipulations to the head as it makes it circular. I DO NOT WANT THE LIST TO BE CIRCULAR
+	if (currentLink != top->firstNode){
+		currentLink->previous->next = 0; //set the new tail
+		currentLink->previous = top->firstNode; //set the 2nd position's previous to point back to firstNode
+		currentLink->next = top->firstNode->next; //set the 2nd position to point to the third
+		top->firstNode->next = currentLink; //set the firstNode's next to point to the second position
+	}
+
 	
 	//can do preincrement / decrement for efficiency later on
 	if (currentDirection == POS_X){
@@ -106,6 +113,7 @@ void move(struct Snake *top){
 		//NOTE A NEGATIVE Y IS TECHNICALLY UP
 		top->firstNode->yPosition = top->firstNode->yPosition - 1;
 	}
+	//draw the new head position
 	drawpixel(top->firstNode->xPosition, top->firstNode->yPosition, 0b0000011111100000, color); //color the new position
 	printf("Move2 \n");
 
@@ -114,7 +122,7 @@ void move(struct Snake *top){
 /**
  * Function for deleting all of the snake's dynamic memory.
  * Prventing leaks.
- */
+ 
  void deleteSnake(struct Snake *top){
 	 struct Node *currentLink = top->firstNode;
 	 //get to the end of the list
@@ -133,3 +141,4 @@ void move(struct Snake *top){
 	free(currentLink); //last link
 	free(top); //dump the pointer at the head of the snake
  }
+ */
