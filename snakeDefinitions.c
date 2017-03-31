@@ -50,14 +50,13 @@ void insertLink(struct Snake *top){
 	struct Node *newNode = malloc(sizeof(struct Node));
 	newNode->previous = top->firstNode; //new guy points back	1
 	newNode->next = top->firstNode->next; //new guy says the next thing is the link after the firstNode 2
-	//newNode->next->previous = newNode;
-	newNode->previous->next = newNode;
-	//check to see if we have more than 2 links basically
-	if (top->firstNode->next != 0){
-		//set the link originally following the 
-		newNode->next->previous = newNode;
+	if (newNode->next ==0){
+		printf("Properly set first iteration\n");
 	}
-	//top->firstNode->next = newNode; //old guy says the next thing is the new guy 4
+	if (top->firstNode->next != 0){
+		top->firstNode->next->previous = newNode;// 3
+	}
+	top->firstNode->next = newNode; //old guy says the next thing is the new guy 4
 	
 	newNode->xPosition = top->firstNode->xPosition;
 	newNode->yPosition = top->firstNode->yPosition;
@@ -75,7 +74,14 @@ void insertLink(struct Snake *top){
 		top->firstNode->yPosition = (top->firstNode->yPosition - 1);
 	}
 	drawpixel(top->firstNode->xPosition, top->firstNode->yPosition, color);
-
+	struct Node *counting = top->firstNode;
+	int count = 0;
+	while (counting->next !=0){
+		printf("Count after adding new node %d\n", count);
+		count++;
+		counting = counting->next;
+	}
+	printf("Insert Link\n");
 }
 
 /**
@@ -84,9 +90,12 @@ void insertLink(struct Snake *top){
  * link while the rest of the snake remains stationary.
  */
 void move(struct Snake *top){
+	int count =0;
+	printf("Move1 \n");
 	struct Node *currentLink = top->firstNode;
-	//update current position to become closer to end
 	while (currentLink->next !=0){
+		printf("Running %d\n", count);
+		count++;
 		currentLink = currentLink->next;
 	}
 	//at this point I have reached the end of the list
@@ -98,13 +107,14 @@ void move(struct Snake *top){
 	//check to make sure we are not manipulating the head. I do not want to do these 
 	//manipulations to the head as it makes it circular. I DO NOT WANT THE LIST TO BE CIRCULAR
 	if (currentLink != top->firstNode){
+		printf("We're not trying to manipulate the head");
 		currentLink->previous->next = 0; //set the new tail
 		currentLink->previous = top->firstNode; //set the 2nd position's previous to point back to firstNode
 		currentLink->next = top->firstNode->next; //set the 2nd position to point to the third
-		currentLink->next->previous = currentLink;   //set link originally following head to point backwards to new link
 		top->firstNode->next = currentLink; //set the firstNode's next to point to the second position
 	}
 
+	
 	//can do preincrement / decrement for efficiency later on
 	if (currentDirection == POS_X){
 		top->firstNode->xPosition = top->firstNode->xPosition + 1; 
@@ -119,6 +129,8 @@ void move(struct Snake *top){
 	}
 	//draw the new head position
 	drawpixel(top->firstNode->xPosition, top->firstNode->yPosition, 0b0000011111100000, color); //color the new position
+	printf("Move2 \n");
+
 }
 
 /**
