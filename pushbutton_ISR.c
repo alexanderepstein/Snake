@@ -1,4 +1,4 @@
-
+#include <stdio.h>
 #if !defined(NEG_X) || !defined(POS_X) || !defined(NEG_Y) || !defined(POS_Y)
 	#define POS_X 1
 	#define NEG_X 2
@@ -6,6 +6,8 @@
 	#define NEG_Y 4
 #endif
 volatile int  currentDirection , start;
+extern volatile struct Snake *head;
+
 /********************************************************************************
 * Pushbutton - Interrupt Service Routine
 *
@@ -21,21 +23,25 @@ press = *(KEY_ptr + 3); // read the pushbutton interrupt register
 if (press & 0x1) // KEY0
 {
   currentDirection = 1;
+  printf("First button \n");
 	move(head);
 }
 else if (press & 0x2)
 {
   currentDirection = 2;
+    printf("Second button \n");
 	move(head);
 }
 else if (press & 0x4) //KEY 2
 {
  currentDirection = 3;
+ printf("Third button \n");
  move(head);
 }
 else if(press & 0x8) //KEY 3
 {
   currentDirection = 4;
+   printf("Fourth button \n");
 	insertLink(head);
 	move(head);
 }

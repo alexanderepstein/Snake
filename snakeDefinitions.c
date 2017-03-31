@@ -1,7 +1,7 @@
 #include <stdlib.h>
-
+#include <stdio.h>
 short color = 0b0000011111100000;
-extern volatile int direction;
+extern volatile int currentDirection;
 
 #if !defined(NEG_X) || !defined(POS_X) || !defined(NEG_Y) || !defined(POS_Y)
 	#define POS_X 1
@@ -33,6 +33,10 @@ void init(){
 	 firstNode->yPosition = 50;
 	 firstNode->color = color;
 	 head->firstNode = firstNode;
+	 firstNode->next = 0;
+	 firstNode->previous = 0;
+	 drawpixel(firstNode->xPosition, firstNode->yPosition, firstNode->color);
+	 printf("Initialization complete\n");
 }
 
 /**
@@ -50,18 +54,20 @@ void insertLink(struct Snake *currentLink){
 	newNode->yPosition = currentLink->firstNode->yPosition;
 	
 	//can do preincrement / decrement for efficiency later on
-	if (direction == POS_X){
+	if (currentDirection == POS_X){
 		currentLink->firstNode->xPosition = currentLink->firstNode->xPosition + 1; 
-	}else if (direction == NEG_X){
+	}else if (currentDirection == NEG_X){
 		currentLink->firstNode->xPosition = currentLink->firstNode->xPosition - 1;
-	}else if (direction == POS_Y){
+	}else if (currentDirection == POS_Y){
 		//NOTE A POSITIVE Y IS TECHNICALLY DOWN
 		currentLink->firstNode->yPosition = currentLink->firstNode->yPosition + 1;
-	}else if (direction == NEG_Y){
+	}else if (currentDirection == NEG_Y){
 		//NOTE A NEGATIVE Y IS TECHNICALLY UP
 		currentLink->firstNode->yPosition = currentLink->firstNode->yPosition - 1;
 	}
+	printf("The current direction %d", currentDirection);
 	drawpixel(currentLink->firstNode->xPosition, currentLink->firstNode->yPosition, color);
+	printf("Insert Link\n");
 }
 
 /**
@@ -70,8 +76,12 @@ void insertLink(struct Snake *currentLink){
  * link while the rest of the snake remains stationary.
  */
 void move(struct Snake *top){
+	int count =0;
+	printf("Move1 \n");
 	struct Node *currentLink = top->firstNode;
 	while (currentLink->next !=0){
+		printf("Running %d\n", count);
+		count++;
 		currentLink = currentLink->next;
 	}
 	//at this point I have reached the end of the list
@@ -85,18 +95,20 @@ void move(struct Snake *top){
 	top->firstNode->next = currentLink; //set the firstNode's next to point to the second position
 	
 	//can do preincrement / decrement for efficiency later on
-	if (direction == POS_X){
+	if (currentDirection == POS_X){
 		top->firstNode->xPosition = top->firstNode->xPosition + 1; 
-	}else if (direction == NEG_X){
+	}else if (currentDirection == NEG_X){
 		top->firstNode->xPosition = top->firstNode->xPosition - 1;
-	}else if (direction == POS_Y){
+	}else if (currentDirection == POS_Y){
 		//NOTE A POSITIVE Y IS TECHNICALLY DOWN
 		top->firstNode->yPosition = top->firstNode->yPosition + 1;
-	}else if (direction == NEG_Y){
+	}else if (currentDirection == NEG_Y){
 		//NOTE A NEGATIVE Y IS TECHNICALLY UP
 		top->firstNode->yPosition = top->firstNode->yPosition - 1;
 	}
 	drawpixel(top->firstNode->xPosition, top->firstNode->yPosition, 0b0000011111100000, color); //color the new position
+	printf("Move2 \n");
+
 }
 
 /**
