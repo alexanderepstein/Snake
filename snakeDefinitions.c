@@ -47,11 +47,15 @@ void init(){
 void insertLink(struct Snake *top){
 	//INSERTING NEW GUY DIRECTLY AFTER HEAD. efficiency reasons
 	struct Node *newNode = malloc(sizeof(struct Node));
+	newNode->previous = top->firstNode; //new guy points back	1
+	newNode->next = top->firstNode->next; //new guy says the next thing is the link after the firstNode 2
 	if (newNode->next ==0){
 		printf("Properly set first iteration\n");
 	}
 	if (top->firstNode->next != 0){
+		top->firstNode->next->previous = newNode;// 3
 	}
+	top->firstNode->next = newNode; //old guy says the next thing is the new guy 4
 	
 	newNode->xPosition = top->firstNode->xPosition;
 	newNode->yPosition = top->firstNode->yPosition;
