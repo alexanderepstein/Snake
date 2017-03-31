@@ -35,9 +35,9 @@ void drawpixel(int x_vga, int y_vga, short color){
   * Function for constructing the wall perimeters in the game. Snake dies upon collision with these.
   */
 void buildWall(short color){
-	for (int x =0; x <= 319; x++){
+	for (int x =0; x <= 318; x++){
 		for (int y =0; y <= 239; y++){
-			if (x == 0 || x == 319 || y ==0 || y == 239){
+			if (x == 0 || x == 318 || y ==0 || y == 239){
 				drawpixel(x,y,color);
 			}
 		}
