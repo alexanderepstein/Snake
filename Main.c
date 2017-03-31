@@ -7,7 +7,9 @@ volatile int firstPattern = 0b00000000000000000000000000000000; // pattern for H
 volatile int secondPattern = 0b00000000000000000000000000000000;
 volatile int scrollType = 0;
 volatile int lastScrollType = 0;
-volatile int direction =0;
+//volatile int direction = 1;
+volatile int direction = -1;
+volatile int yPos = 120;
 volatile int lastDirection =0;
 volatile int pause = 0;
 /********************************************************************************
