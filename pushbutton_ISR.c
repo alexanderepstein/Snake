@@ -17,25 +17,27 @@ volatile int * KEY_ptr = (int *) 0xFF200050;
 int press;
 press = *(KEY_ptr + 3); // read the pushbutton interrupt register
 *(KEY_ptr + 3) = press; // clear the interrupt
-if (start == 0)
-{
-  start = 1;
-}
+
 if (press & 0x1) // KEY0
 {
   currentDirection = 1;
+	move(head);
 }
 else if (press & 0x2)
 {
   currentDirection = 2;
+	move(head);
 }
 else if (press & 0x4) //KEY 2
 {
  currentDirection = 3;
+ move(head);
 }
 else if(press & 0x8) //KEY 3
 {
   currentDirection = 4;
+	insertLink(head);
+	move(head);
 }
 
 return;
