@@ -1,7 +1,7 @@
 #include <stdlib.h>
 
 short color = 0b0000011111100000;
-extern int direction;
+extern volatile int direction;
 
 #if !defined(NEG_X) || !defined(POS_X) || !defined(NEG_Y) || !defined(POS_Y)
 	#define POS_X 1

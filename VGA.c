@@ -65,6 +65,5 @@ void clearscreen (){
 	volatile char* character_buffer = (char *) (0x09000000 + (y_char <<7) + x_char);
 	*character_buffer = mychar;
 }*/
-volatile int direction = -1;
-volatile int yPos = 120;
+
 
