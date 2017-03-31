@@ -6,8 +6,11 @@
 	#define NEG_Y 4
 #endif
 volatile int currentDirection;
+volatile int pushButtonThread = 0;
 extern volatile struct Snake *head;
-extern volatile int start;
+extern volatile int start, timerThread;
+int press;
+
 
 /********************************************************************************
 * Pushbutton - Interrupt Service Routine
@@ -16,11 +19,21 @@ extern volatile int start;
 * variable KEY_PRESSED.
 ********************************************************************************/
 void pushbutton_ISR( void ) {
-volatile int * KEY_ptr = (int *) 0xFF200050;
-int press;
 start =1;
-press = *(KEY_ptr + 3); // read the pushbutton interrupt register
+
+press= *(KEY_ptr + 3); // read the pushbutton interrupt register
 *(KEY_ptr + 3) = press; // clear the interrupt
+
+
+
+if (!timerThread)
+{
+pushButtonThread = 1;
+
+volatile int * KEY_ptr = (int *) 0xFF200050;
+
+
+
 
 if (press & 0x1) // KEY0
 {
@@ -60,6 +73,8 @@ else if(press & 0x8) //KEY 3
   }
 
 }
-
+pushButtonThread = 0;
+}
 return;
+
 }
