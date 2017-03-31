@@ -49,11 +49,13 @@ else if (press & 0x4) //KEY 2
 }
 else if(press & 0x8) //KEY 3
 {
-
+	if (currentDirection!= 3)
+	{
   currentDirection = 4;
-   printf("Fourth button \n");
+  printf("Fourth button \n");
 	insertLink(head);
-	//move(head);
+	move(head);
+  }
 
 }
 
