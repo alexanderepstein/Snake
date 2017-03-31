@@ -22,7 +22,7 @@ struct Snake{
 };
 
 //setting up head here
-volatile struct Snake *head;
+struct Snake *head;
 
 void init(){
 	 head = malloc(sizeof(struct Snake));
@@ -44,30 +44,38 @@ void init(){
  * Function that handles inserting a link to the snake. Please note we do not wish to move the entire snake (list of nodes).
  * Insead, we just advance the head up one and then insert a new link behind the head of the snake.
  */
-void insertLink(struct Snake *currentLink){
+void insertLink(struct Snake *top){
 	//INSERTING NEW GUY DIRECTLY AFTER HEAD. efficiency reasons
 	struct Node *newNode = malloc(sizeof(struct Node));
-	newNode->previous = currentLink->firstNode; //new guy points back
-	newNode->next = currentLink->firstNode->next; //new guy says the next thing is the link after the firstNode
-	currentLink->firstNode->next = newNode; //old guy says the next thing is the new guy
+	if (newNode->next ==0){
+		printf("Properly set first iteration\n");
+	}
+	if (top->firstNode->next != 0){
+	}
 	
-	newNode->xPosition = currentLink->firstNode->xPosition;
-	newNode->yPosition = currentLink->firstNode->yPosition;
+	newNode->xPosition = top->firstNode->xPosition;
+	newNode->yPosition = top->firstNode->yPosition;
 	
 	//can do preincrement / decrement for efficiency later on
 	if (currentDirection == POS_X){
-		currentLink->firstNode->xPosition = currentLink->firstNode->xPosition + 1; 
+		top->firstNode->xPosition = (top->firstNode->xPosition + 1); 
 	}else if (currentDirection == NEG_X){
-		currentLink->firstNode->xPosition = currentLink->firstNode->xPosition - 1;
+		top->firstNode->xPosition = (top->firstNode->xPosition - 1);
 	}else if (currentDirection == POS_Y){
 		//NOTE A POSITIVE Y IS TECHNICALLY DOWN
-		currentLink->firstNode->yPosition = currentLink->firstNode->yPosition + 1;
+		top->firstNode->yPosition = (top->firstNode->yPosition + 1);
 	}else if (currentDirection == NEG_Y){
 		//NOTE A NEGATIVE Y IS TECHNICALLY UP
-		currentLink->firstNode->yPosition = currentLink->firstNode->yPosition - 1;
+		top->firstNode->yPosition = (top->firstNode->yPosition - 1);
 	}
-	printf("The current direction %d", currentDirection);
-	drawpixel(currentLink->firstNode->xPosition, currentLink->firstNode->yPosition, color);
+	drawpixel(top->firstNode->xPosition, top->firstNode->yPosition, color);
+	struct Node *counting = top->firstNode;
+	int count = 0;
+	while (counting->next !=0){
+		printf("Count after adding new node %d\n", count);
+		count++;
+		counting = counting->next;
+	}
 	printf("Insert Link\n");
 }
 
@@ -94,6 +102,7 @@ void move(struct Snake *top){
 	//check to make sure we are not manipulating the head. I do not want to do these 
 	//manipulations to the head as it makes it circular. I DO NOT WANT THE LIST TO BE CIRCULAR
 	if (currentLink != top->firstNode){
+		printf("We're not trying to manipulate the head");
 		currentLink->previous->next = 0; //set the new tail
 		currentLink->previous = top->firstNode; //set the 2nd position's previous to point back to firstNode
 		currentLink->next = top->firstNode->next; //set the 2nd position to point to the third
