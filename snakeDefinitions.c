@@ -53,40 +53,50 @@ void insertLink(struct Snake *top){
 	if (newNode->next ==0){
 		printf("Properly set first iteration\n");
 	}
-	if (top->firstNode->next != 0){
+	if (top->firstNode->next != 0)
+	{
 		top->firstNode->next->previous = newNode;// 3
 	}
 	top->firstNode->next = newNode; //old guy says the next thing is the new guy 4
-	
+
 	newNode->xPosition = top->firstNode->xPosition;
 	newNode->yPosition = top->firstNode->yPosition;
-	
+
 	drawpixel(top->firstNode->xPosition, top->firstNode->yPosition, 0b0000011111100000, color); //color the old head position
 
 	//can do preincrement / decrement for efficiency later on
-	if (currentDirection == POS_X){
-		top->firstNode->xPosition = (top->firstNode->xPosition + 1); 
-	}else if (currentDirection == NEG_X){
+	if (currentDirection == POS_X)
+	{
+		top->firstNode->xPosition = (top->firstNode->xPosition + 1);
+	}
+	else if (currentDirection == NEG_X)
+	{
 		top->firstNode->xPosition = (top->firstNode->xPosition - 1);
-	}else if (currentDirection == POS_Y){
+	}
+	else if (currentDirection == POS_Y)
+	{
 		//NOTE A POSITIVE Y IS TECHNICALLY DOWN
 		top->firstNode->yPosition = (top->firstNode->yPosition + 1);
-	}else if (currentDirection == NEG_Y){
+	}
+	else if (currentDirection == NEG_Y)
+	{
 		//NOTE A NEGATIVE Y IS TECHNICALLY UP
 		top->firstNode->yPosition = (top->firstNode->yPosition - 1);
 	}
 	drawpixel(top->firstNode->xPosition, top->firstNode->yPosition, color);
-	
+
 }
 
 /**
  * Function responsible for advancing the snakes position. Please note we do not wish to move the entire snake (list of nodes).
- * Insead, we advance the head up one then slide the tail up behind the head. Effectively the head moves up one and last link becomes the new second 
+ * Insead, we advance the head up one then slide the tail up behind the head. Effectively the head moves up one and last link becomes the new second
  * link while the rest of the snake remains stationary.
  */
-void move(struct Snake *top){
+void move(struct Snake *top)
+{
 	struct Node *currentLink = top->firstNode;
-	while (currentLink->next !=0){
+	while (currentLink->next !=0)
+	{
 		currentLink = currentLink->next;
 	}
 	//at this point I have reached the end of the list
@@ -94,31 +104,39 @@ void move(struct Snake *top){
 	//advance position of tail to be where the head was
 	currentLink->xPosition = top->firstNode->xPosition;
 	currentLink->yPosition = top->firstNode->yPosition;
-	
-	//check to make sure we are not manipulating the head. I do not want to do these 
+
+	//check to make sure we are not manipulating the head. I do not want to do these
 	//manipulations to the head as it makes it circular. I DO NOT WANT THE LIST TO BE CIRCULAR
-	if (currentLink != top->firstNode){
+	if (currentLink != top->firstNode)
+	{
 		currentLink->previous->next = 0; //set the new tail
 		currentLink->previous = top->firstNode; //set the 2nd position's previous to point back to firstNode
 		currentLink->next = top->firstNode->next; //set the 2nd position to point to the third
 		currentLink->next->previous = currentLink;
 		top->firstNode->next = currentLink; //set the firstNode's next to point to the second position
 	}
-	
+
 	//verify snake has more than 1 node for this color shift
-	if (top->firstNode->next != 0){
+	if (top->firstNode->next != 0)
+	{
 		//recolor pixel at old head
 		drawpixel(top->firstNode->xPosition, top->firstNode->yPosition, 0b0000011111100000, color); //color the old head position
 	}
 	//can do preincrement / decrement for efficiency later on
-	if (currentDirection == POS_X){
-		top->firstNode->xPosition = top->firstNode->xPosition + 1; 
-	}else if (currentDirection == NEG_X){
+	if (currentDirection == POS_X)
+	{
+		top->firstNode->xPosition = top->firstNode->xPosition + 1;
+	}else if (currentDirection == NEG_X)
+	{
 		top->firstNode->xPosition = top->firstNode->xPosition - 1;
-	}else if (currentDirection == POS_Y){
+	}
+	else if (currentDirection == POS_Y)
+	{
 		//NOTE A POSITIVE Y IS TECHNICALLY DOWN
 		top->firstNode->yPosition = top->firstNode->yPosition + 1;
-	}else if (currentDirection == NEG_Y){
+	}
+	else if (currentDirection == NEG_Y)
+	{
 		//NOTE A NEGATIVE Y IS TECHNICALLY UP
 		top->firstNode->yPosition = top->firstNode->yPosition - 1;
 	}
@@ -134,22 +152,25 @@ void generateFood(struct Snake *top){
 	int conflict = 1;
 	int foodXCoordinate;
 	int foodYCoordinate;
-	while (conflict){
+	while (conflict)
+	{
 		conflict = 0;
 		//plus 1 is for wall offset
 		foodXCoordinate = (rand() % 317) + 1;
 		foodYCoordinate = (rand() % 237) + 1;
 
 		//check for conflicts
-		for (struct Node *temp = top->firstNode; temp->next != 0; temp = temp->next){
-			if (temp->xPosition == foodXCoordinate && temp->yPosition == foodYCoordinate){
-				//conflict 
+		for (struct Node *temp = top->firstNode; temp->next != 0; temp = temp->next)
+		{
+			if (temp->xPosition == foodXCoordinate && temp->yPosition == foodYCoordinate)
+			{
+				//conflict
 				conflict = 1;
 				break;
 			}
 		}
 	}
-	drawpixel(foodXCoordinate,foodYCoordinate, foodColor);
+		drawpixel(foodXCoordinate,foodYCoordinate, foodColor);
 }
 
 /*
@@ -160,7 +181,7 @@ void recolorHead(struct Snake *top){
 /**
  * Function for deleting all of the snake's dynamic memory.
  * Prventing leaks.
- 
+
  void deleteSnake(struct Snake *top){
 	 struct Node *currentLink = top->firstNode;
 	 //get to the end of the list
@@ -168,13 +189,13 @@ void recolorHead(struct Snake *top){
 		currentLink = currentLink->next;
 	}
 	struct Node *temp; //temporay pointer that will store an additional link to prevent orphaning
-	
+
 	//check that there is something before it
 	while(currentLink->previous !=0){
 		temp = currentLink; //set temporary pointer
 		temp = currentLink->previous; //go back one
 		free(currentLink); //delete the current one
-		currentLink = temp; //slide our tracking variable 
+		currentLink = temp; //slide our tracking variable
 	}
 	free(currentLink); //last link
 	free(top); //dump the pointer at the head of the snake

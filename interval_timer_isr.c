@@ -1,6 +1,6 @@
 #include "stdio.h"
 
-int temp;
+
 extern volatile int yPos, currentDirection, start, pushButtonThread;
 /********************************************************************************
 * Interval timer interrupt service routine
@@ -8,23 +8,23 @@ extern volatile int yPos, currentDirection, start, pushButtonThread;
 volatile int timerThread = 0;
 extern volatile struct Snake *head;
 
-int counter = 0;
+
 void interval_timer_isr(){
 
 	volatile int * interval_timer_ptr = (int *) 0xFF202000; // interval timer base address
 	*(interval_timer_ptr) = 0; // clear the interrupt
-	if (!pushButtonThread && !timerThread)
+	if (!pushButtonThread && !timerThread) //check if timer and push button threads are not running
 	{
 
-		timerThread =1;
-		if (start)
+		timerThread =1; //set timer thread to running
+		if (start) //check if the game has started
 		{
 		  //insertLink(head);
-		  move(head);
+		  move(head); //move the snake;
 		  //recolorHead(head);
 		}
 
-		timerThread = 0;
+		timerThread = 0; //set the timer thread to not running
 		return;
 
 	/*
