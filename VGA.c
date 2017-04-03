@@ -34,6 +34,7 @@ void drawpixel(int x_vga, int y_vga, short color){
 /**
  * Function for drawing a filled in square. Each node will act as one of these
  */
+void fillSquare(int x1, int x2, int y1, int y2, short pixel_color){	
 	int row, col;
   	
 	/* assume that the box coordinates are valid */
