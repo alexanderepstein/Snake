@@ -14,7 +14,7 @@
  * these as volatile to avoid the compiler caching their values in registers */
 extern volatile char byte1, byte2;			/* modified by PS/2 interrupt service routine */
 extern volatile int timeout;					// used to synchronize with the timer
-
+extern volatile struct Snake *head;
 /*Color a pixel */
 /*void drawpixel(int x_vga, int y_vga, short color){
 	volatile char *pixel_address = (volatile char*) (0x08000000 + (y_vga <<7) + (x_vga));
@@ -30,6 +30,36 @@ void drawpixel(int x_vga, int y_vga, short color){
     *pixel_address = color;
 	//TODO double buffer
 }
+
+
+void initialization()
+{
+	clearscreen();
+	char snakeText[10] = "Snake\0";
+	char scoreText[10] = "Score:\0";
+	VGA_Text(250, 8,scoreText);
+	VGA_text(159,8,snakeText);
+	buildWall(0b1111100000000000);
+	generateFood(head);
+  init();
+}
+/****************************************************************************************
+ * Subroutine to send a string of text to the VGA monitor
+****************************************************************************************/
+void VGA_text(int x, int y, char * text_ptr){
+	int offset;
+  	volatile char * character_buffer = (char *) 0x09000000;	// VGA character buffer
+
+	/* assume that the text string fits on one line */
+	offset = (y << 7) + x; //how its stored as address y gets shifted up 7.
+	while ( *(text_ptr) ){
+		//while text has stuff
+		*(character_buffer + offset) = *(text_ptr);	// write to the character buffer
+		++text_ptr;
+		++offset;
+	}
+}
+
 
 /**
   * Function for constructing the wall perimeters in the game. Snake dies upon collision with these.
@@ -65,5 +95,3 @@ void clearscreen (){
 	volatile char* character_buffer = (char *) (0x09000000 + (y_char <<7) + x_char);
 	*character_buffer = mychar;
 }*/
-
-

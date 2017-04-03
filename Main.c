@@ -8,7 +8,7 @@ volatile int currentDirection = 1;
 volatile int yPos = 120;
 volatile int start = 0;
 
-extern volatile struct Snake *head;
+
 /********************************************************************************
 * This program demonstrates use of interrupts in the DE0-CV Computer. It first starts the
 * interval timer with 33 msec timeouts, and then enables interrupts from the interval timer
@@ -38,9 +38,9 @@ int main(void)
   NIOS2_WRITE_IENABLE( 0x3 ); /* set interrupt mask bits for levels 0 (interval timer)
   * and level 1 (pushbuttons) */
   NIOS2_WRITE_STATUS( 1 ); // enable Nios II interrupts
-  clearscreen();
-  buildWall(0b1111100000000000);
-  init();
-  generateFood(head);
+
+
+  initialization()
+
   while(1); // main program simply idles
 }
