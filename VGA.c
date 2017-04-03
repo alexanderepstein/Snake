@@ -53,9 +53,9 @@ void VGA_text(int x, int y, char * text_ptr){
 /**
  * Function for drawing a filled in square. Each node will act as one of these
  */
-void fillSquare(int x1, int x2, int y1, int y2, short pixel_color){	
+void fillSquare(int x1, int x2, int y1, int y2, short pixel_color){
 	int row, col;
-  	
+
 	/* assume that the box coordinates are valid */
 	for (row = y1; row <= y2; row++){
 		//iterate by row
@@ -79,16 +79,16 @@ void buildWall(short color){
 			}
 		}
 	}*/
-	for (int y =0; y < 239; y++){
+	for (int y =20; y < 239; y++){
 		drawpixel(0,y,color);
 		drawpixel(318,y,color);
 	}
 	for (int x =0; x < 319; x++){
-		drawpixel(x,0,color);
+		drawpixel(x,20,color);
 		drawpixel(x,239,color);
 	}
-	printf("Walls are drawn");
-	
+	printf("Walls are drawn\n");
+
 }
 
 
@@ -133,5 +133,3 @@ void clearText()
 	volatile char* character_buffer = (char *) (0x09000000 + (y_char <<7) + x_char);
 	*character_buffer = mychar;
 }*/
-
-

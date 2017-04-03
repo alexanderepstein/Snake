@@ -39,7 +39,7 @@ void initSnake(){
  	 head->firstNode = firstNode;
 
 	 fillSquare(firstNode->xPosition-1, firstNode->xPosition+1, firstNode->yPosition-1, firstNode->yPosition+1, firstNode->color);
-	 printf("Initialization complete\n");
+	 printf("Snake Initialized \n");
 }
 
 /**
@@ -61,12 +61,12 @@ void insertLink(struct Snake *top){
 
 	newNode->xPosition = top->firstNode->xPosition;
 	newNode->yPosition = top->firstNode->yPosition;
-	
+
 	fillSquare(top->firstNode->xPosition-1, top->firstNode->xPosition+1, top->firstNode->yPosition-1, top->firstNode->yPosition+1, bodyColor); //color the old head position
 
 	//can do preincrement / decrement for efficiency later on
 	if (currentDirection == POS_X){
-		top->firstNode->xPosition = (top->firstNode->xPosition + 2); 
+		top->firstNode->xPosition = (top->firstNode->xPosition + 2);
 	}else if (currentDirection == NEG_X){
 		top->firstNode->xPosition = (top->firstNode->xPosition - 2);
 	}else if (currentDirection == POS_Y){
@@ -112,7 +112,7 @@ void move(struct Snake *top){
 	}
 	//can do preincrement / decrement for efficiency later on
 	if (currentDirection == POS_X){
-		top->firstNode->xPosition = top->firstNode->xPosition + 2; 
+		top->firstNode->xPosition = top->firstNode->xPosition + 2;
 	}else if (currentDirection == NEG_X){
 		top->firstNode->xPosition = top->firstNode->xPosition - 2;
 	}else if (currentDirection == POS_Y){

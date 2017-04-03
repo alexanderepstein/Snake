@@ -1,5 +1,5 @@
 #include "nios2_ctrl_reg_macros.h"
-
+#include <stdio.h>
 /* key_pressed and pattern are written by interrupt service routines; we have to declare
 * these as volatile to avoid the compiler caching their values in registers */
 
@@ -29,12 +29,12 @@ void initialization()
 	clearText();
 	char snakeText[10] = "Snake\0";
 	char scoreText[10] = "Score\0";
-
-	VGA_text(39,2,snakeText);
+	VGA_text(37,2,snakeText);
 	VGA_text(60, 2,scoreText);
 	buildWall(wallColor);
-    initSnake();
+  initSnake();
 	generateFood(head);
+	printf("Game Initialization complete \n");
 }
 
 
