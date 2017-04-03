@@ -40,7 +40,7 @@ int main(void)
   NIOS2_WRITE_STATUS( 1 ); // enable Nios II interrupts
 
 
-  initialization()
+  initialization();
 
   while(1); // main program simply idles
 }

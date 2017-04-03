@@ -32,17 +32,7 @@ void drawpixel(int x_vga, int y_vga, short color){
 }
 
 
-void initialization()
-{
-	clearscreen();
-	char snakeText[10] = "Snake\0";
-	char scoreText[10] = "Score:\0";
-	VGA_Text(250, 8,scoreText);
-	VGA_text(159,8,snakeText);
-	buildWall(0b1111100000000000);
-	generateFood(head);
-  init();
-}
+
 /****************************************************************************************
  * Subroutine to send a string of text to the VGA monitor
 ****************************************************************************************/
@@ -51,7 +41,7 @@ void VGA_text(int x, int y, char * text_ptr){
   	volatile char * character_buffer = (char *) 0x09000000;	// VGA character buffer
 
 	/* assume that the text string fits on one line */
-	offset = (y << 7) + x; //how its stored as address y gets shifted up 7.
+	offset = (y << 7) + (x); //how its stored as address y gets shifted up 7.
 	while ( *(text_ptr) ){
 		//while text has stuff
 		*(character_buffer + offset) = *(text_ptr);	// write to the character buffer
@@ -89,9 +79,46 @@ void clearscreen (){
 	}
 }
 
+void clearTest()
+{
+	volatile char * character_buffer = (char *) 0x09000000;	// VGA character buffer
+	for (int i = 0;i <80;i++)
+	{
+		for(int j=0;j<60;j++)
+		{
+			int offset;
+
+			/* assume that the text string fits on one line */
+			offset = (j << 7) + (i); //how its stored as address y gets shifted up 7.
+
+				//while text has stuff
+			*(character_buffer + offset) = 0;	// write to the character buffer
+			//++offset;
+
+		}
+	}
+
+}
+
 /* Draw a single character on the screen */
 
 /*void drawcharacter(int x_char, int y_char, char mychar){
 	volatile char* character_buffer = (char *) (0x09000000 + (y_char <<7) + x_char);
 	*character_buffer = mychar;
 }*/
+
+
+void initialization()
+{
+	clearscreen();
+	clearTest();
+	char snakeText[10] = "Snake\0";
+	char scoreText[10] = "Score\0";
+
+	VGA_text(39,2,snakeText);
+	VGA_text(60, 2,scoreText);
+	buildWall(0b1111100000000000);
+  init();
+	generateFood(head);
+
+}
