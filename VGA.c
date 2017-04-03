@@ -14,7 +14,6 @@
  * these as volatile to avoid the compiler caching their values in registers */
 extern volatile char byte1, byte2;			/* modified by PS/2 interrupt service routine */
 extern volatile int timeout;					// used to synchronize with the timer
-extern volatile struct Snake *head;
 /*Color a pixel */
 /*void drawpixel(int x_vga, int y_vga, short color){
 	volatile char *pixel_address = (volatile char*) (0x08000000 + (y_vga <<7) + (x_vga));
@@ -107,7 +106,7 @@ void clearscreen (){
 	}
 }
 
-void clearTest()
+void clearText()
 {
 	volatile char * character_buffer = (char *) 0x09000000;	// VGA character buffer
 	for (int i = 0;i <80;i++)
@@ -136,17 +135,3 @@ void clearTest()
 }*/
 
 
-void initialization()
-{
-	clearscreen();
-	clearTest();
-	char snakeText[10] = "Snake\0";
-	char scoreText[10] = "Score\0";
-
-	VGA_text(39,2,snakeText);
-	VGA_text(60, 2,scoreText);
-	buildWall(0b1111100000000000);
-  init();
-	generateFood(head);
-
-}
