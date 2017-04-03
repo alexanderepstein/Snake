@@ -14,7 +14,7 @@
  * these as volatile to avoid the compiler caching their values in registers */
 extern volatile char byte1, byte2;			/* modified by PS/2 interrupt service routine */
 extern volatile int timeout;					// used to synchronize with the timer
-
+extern volatile struct Snake *head;
 /*Color a pixel */
 /*void drawpixel(int x_vga, int y_vga, short color){
 	volatile char *pixel_address = (volatile char*) (0x08000000 + (y_vga <<7) + (x_vga));
@@ -30,6 +30,26 @@ void drawpixel(int x_vga, int y_vga, short color){
     *pixel_address = color;
 	//TODO double buffer
 }
+
+
+
+/****************************************************************************************
+ * Subroutine to send a string of text to the VGA monitor
+****************************************************************************************/
+void VGA_text(int x, int y, char * text_ptr){
+	int offset;
+  	volatile char * character_buffer = (char *) 0x09000000;	// VGA character buffer
+
+	/* assume that the text string fits on one line */
+	offset = (y << 7) + (x); //how its stored as address y gets shifted up 7.
+	while ( *(text_ptr) ){
+		//while text has stuff
+		*(character_buffer + offset) = *(text_ptr);	// write to the character buffer
+		++text_ptr;
+		++offset;
+	}
+}
+
 
 /**
  * Function for drawing a filled in square. Each node will act as one of these
@@ -87,6 +107,27 @@ void clearscreen (){
 	}
 }
 
+void clearTest()
+{
+	volatile char * character_buffer = (char *) 0x09000000;	// VGA character buffer
+	for (int i = 0;i <80;i++)
+	{
+		for(int j=0;j<60;j++)
+		{
+			int offset;
+
+			/* assume that the text string fits on one line */
+			offset = (j << 7) + (i); //how its stored as address y gets shifted up 7.
+
+				//while text has stuff
+			*(character_buffer + offset) = 0;	// write to the character buffer
+			//++offset;
+
+		}
+	}
+
+}
+
 /* Draw a single character on the screen */
 
 /*void drawcharacter(int x_char, int y_char, char mychar){
@@ -95,3 +136,17 @@ void clearscreen (){
 }*/
 
 
+void initialization()
+{
+	clearscreen();
+	clearTest();
+	char snakeText[10] = "Snake\0";
+	char scoreText[10] = "Score\0";
+
+	VGA_text(39,2,snakeText);
+	VGA_text(60, 2,scoreText);
+	buildWall(0b1111100000000000);
+  init();
+	generateFood(head);
+
+}

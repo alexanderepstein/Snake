@@ -27,12 +27,16 @@ press= *(KEY_ptr + 3); // read the pushbutton interrupt register
 
 
 
-if (!timerThread)
+if (!timerThread && !pushButtonThread) //check if the timer isr is not running along with pushButtonThread 
 {
-	pushButtonThread = 1;
+	pushButtonThread = 1; //set the push button isr thread to be running
 
 
-
+/*
+The large conditional block determine the button was pressed and based on the
+current direction determines whether or not you can go the desired direction
+if you can the direction will be changed, if not the isr will essentially do nothing
+*/
 
 
 	if (press & 0x1) // KEY0
@@ -68,12 +72,12 @@ if (!timerThread)
 		{
 		currentDirection = 4;
 		printf("Fourth button \n");
-		insertLink(head);
+		//insertLink(head); //used for debugging to control the size of the snake manually
 
 	  }
 
 	}
-	pushButtonThread = 0;
+	pushButtonThread = 0; //set the push button isr thread to not running
 }
 return;
 
