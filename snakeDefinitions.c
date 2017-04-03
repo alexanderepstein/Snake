@@ -74,6 +74,8 @@ void insertLink(struct Snake *top){
 		//NOTE A POSITIVE Y IS TECHNICALLY DOWN
 		top->firstNode->yPosition = (top->firstNode->yPosition + 2);
 	}else if (currentDirection == NEG_Y){
+		top->firstNode->yPosition = (top->firstNode->yPosition + -2);
+	}
 	fillSquare(top->firstNode->xPosition-1, top->firstNode->xPosition+1, top->firstNode->yPosition-1, top->firstNode->yPosition+1, headColor); //color the new head
 }
 
