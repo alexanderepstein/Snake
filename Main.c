@@ -7,7 +7,8 @@
 volatile int currentDirection = 1;
 volatile int yPos = 120;
 volatile int start = 0;
-
+const short wallColor = (short) 0b1111100000000000;
+extern volatile struct Snake *head;
 
 /********************************************************************************
 * This program demonstrates use of interrupts in the DE0-CV Computer. It first starts the
@@ -21,8 +22,23 @@ volatile int start = 0;
 * KEY[2]: rotates the displayed pattern to the left
 * KEY[3]: stops the rotation
 ********************************************************************************/
-int main(void)
+
+void initialization()
 {
+	clearscreen();
+	clearText();
+	char snakeText[10] = "Snake\0";
+	char scoreText[10] = "Score\0";
+
+	VGA_text(39,2,snakeText);
+	VGA_text(60, 2,scoreText);
+	buildWall(wallColor);
+    initSnake();
+	generateFood(head);
+}
+
+
+int main(void){
   /* Declare volatile pointers to I/O registers (volatile means that IO load and store instructions
   * will be used to access these pointer locations instead of regular memory loads and stores) */
   volatile int * interval_timer_ptr = (int *) 0xFF202000; // interval timer base address
