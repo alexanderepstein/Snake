@@ -1,4 +1,4 @@
-//#include <stdio.h>
+#include <stdio.h>
 #include "nios2_ctrl_reg_macros.h"
 
 /*
@@ -32,16 +32,43 @@ void drawpixel(int x_vga, int y_vga, short color){
 }
 
 /**
+ * Function for drawing a filled in square. Each node will act as one of these
+ */
+	int row, col;
+  	
+	/* assume that the box coordinates are valid */
+	for (row = y1; row <= y2; row++){
+		//iterate by row
+		col = x1;
+		while (col <= x2){
+			//fill vertically
+			drawpixel(col,row,pixel_color);
+			++col;
+		}
+	}
+}
+
+/**
   * Function for constructing the wall perimeters in the game. Snake dies upon collision with these.
   */
 void buildWall(short color){
-	for (int x =0; x <= 319; x++){
+	/*for (int x =0; x <= 319; x++){
 		for (int y =0; y <= 239; y++){
-			if (x == 0 || x == 319 || y ==0 || y == 239){
+			if (x <= 0 || x >= 319 || y <= 0 || y >= 239){
 				drawpixel(x,y,color);
 			}
 		}
+	}*/
+	for (int y =0; y < 239; y++){
+		drawpixel(0,y,color);
+		drawpixel(318,y,color);
 	}
+	for (int x =0; x < 319; x++){
+		drawpixel(x,0,color);
+		drawpixel(x,239,color);
+	}
+	printf("Walls are drawn");
+	
 }
 
 
