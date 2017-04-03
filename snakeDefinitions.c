@@ -26,7 +26,7 @@ struct Snake{
 //setting up head here
 struct Snake *head;
 
-void init(){
+void initSnake(){
 	 head = malloc(sizeof(struct Snake));
 	 //set up first node
 	 struct Node *firstNode = malloc(sizeof(struct Node));
@@ -54,8 +54,7 @@ void insertLink(struct Snake *top){
 	if (newNode->next ==0){
 		printf("Properly set first iteration\n");
 	}
-	if (top->firstNode->next != 0)
-	{
+	if (top->firstNode->next != 0){
 		top->firstNode->next->previous = newNode;// 3
 	}
 	top->firstNode->next = newNode; //old guy says the next thing is the new guy 4
@@ -84,11 +83,9 @@ void insertLink(struct Snake *top){
  * Insead, we advance the head up one then slide the tail up behind the head. Effectively the head moves up one and last link becomes the new second
  * link while the rest of the snake remains stationary.
  */
-void move(struct Snake *top)
-{
+void move(struct Snake *top){
 	struct Node *currentLink = top->firstNode;
-	while (currentLink->next !=0)
-	{
+	while (currentLink->next !=0){
 		currentLink = currentLink->next;
 	}
 	//at this point I have reached the end of the list
@@ -100,8 +97,7 @@ void move(struct Snake *top)
 
 	//check to make sure we are not manipulating the head. I do not want to do these
 	//manipulations to the head as it makes it circular. I DO NOT WANT THE LIST TO BE CIRCULAR
-	if (currentLink != top->firstNode)
-	{
+	if (currentLink != top->firstNode){
 		currentLink->previous->next = 0; //set the new tail
 		currentLink->previous = top->firstNode; //set the 2nd position's previous to point back to firstNode
 		currentLink->next = top->firstNode->next; //set the 2nd position to point to the third
@@ -110,11 +106,9 @@ void move(struct Snake *top)
 	}
 
 	//verify snake has more than 1 node for this color shift
-	if (top->firstNode->next != 0)
-	{
+	if (top->firstNode->next != 0){
 		//recolor pixel at old head
 		fillSquare(top->firstNode->xPosition-1, top->firstNode->xPosition+1, top->firstNode->yPosition-1, top->firstNode->yPosition+1, bodyColor); //color the old head position
-
 	}
 	//can do preincrement / decrement for efficiency later on
 	if (currentDirection == POS_X){
@@ -139,18 +133,15 @@ void generateFood(struct Snake *top){
 	int conflict = 1;
 	int foodXCoordinate;
 	int foodYCoordinate;
-	while (conflict)
-	{
+	while (conflict){
 		conflict = 0;
 		//plus 1 is for wall offset
 		foodXCoordinate = (rand() % 315) + 2;
 		foodYCoordinate = (rand() % 235) + 2;
 
 		//check for conflicts
-		for (struct Node *temp = top->firstNode; temp->next != 0; temp = temp->next)
-		{
-			if (temp->xPosition == foodXCoordinate && temp->yPosition == foodYCoordinate)
-			{
+		for (struct Node *temp = top->firstNode; temp->next != 0; temp = temp->next){
+			if (temp->xPosition == foodXCoordinate && temp->yPosition == foodYCoordinate){
 				//conflict
 				conflict = 1;
 				break;
