@@ -157,14 +157,12 @@ void drawScore(int x, int y){
 
 void setScore()
 {
-	int a, b , c, d;
+	int  b , c, d;
 	int temp = score;
-	a = temp / 1000;
-	temp = score - a*1000;
 	b = temp / 100;
 	temp = temp - b*100;
 	c = temp / 10;
 	d = temp - c*10;
-	*HEX3_HEX0_ptr = (Numbers[a] << 24) | (Numbers[b] << 16) | (Numbers[c] << 8) | Numbers[d];
+	*HEX3_HEX0_ptr = (Numbers[b] << 16) | (Numbers[c] << 8) | Numbers[d];
 	drawScore(67,2);
 }
