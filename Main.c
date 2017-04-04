@@ -36,23 +36,26 @@ void setInfoBar()
 
 void welcomeScreen()
 {
+	clearscreen();
+	clearText();
 	char welcomeText[] = "Welcome to Snake!\0";
 	char howToStart[] = "Press any button to start.\0";
 	VGA_text(33,24,welcomeText);
 	VGA_text(29, 32,howToStart);
+	welcome = 1;
 }
 
 void initialization()
 {
 	clearscreen();
 	clearText();
-	welcomeScreen();
 	setInfoBar();
 	buildWall(wallColor);
 	setScore();
-    initSnake();
+  initSnake();
 	generateFood(head);
 	printf("Game Initialization complete \n");
+	printf("Check to kill snake: %d",checktokillSnake());
 }
 
 
@@ -74,15 +77,15 @@ int main(void){
   * and level 1 (pushbuttons) */
   NIOS2_WRITE_STATUS( 1 ); // enable Nios II interrupts
 
+	welcomeScreen();
 
-  initialization();
   /* Test code for deleting memory
 	insertLink(head);
 	insertLink(head);
 	insertLink(head);
 	insertLink(head);
 	insertLink(head);
-	
+
   deleteSnake(head);
 */
   while(1); // main program simply idles
