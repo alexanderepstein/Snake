@@ -85,6 +85,7 @@ void buildWall(short color){
 			}
 		}
 	}*/
+	//this is more efficient as it iterates through less entries
 	for (int y =20; y < 239; y++){
 		drawpixel(0,y,color);
 		drawpixel(318,y,color);
@@ -134,11 +135,11 @@ void clearText()
 }
 
 //67,68,69
-void drawScore(int scoreCounter, int x, int y){
-	int ones = scoreCounter%10; //only get first digit of score
-	int tens = (scoreCounter%100 - ones) / 10; //only get second digit of score
-	int hundreds = (scoreCounter%1000 - tens - ones) /100; //only get third digit of score
-
+void drawScore(int x, int y){
+	int ones = score%10; //only get first digit of score
+	int tens = (score%100 - ones) / 10; //only get second digit of score
+	int hundreds = (score%1000 - tens - ones) /100; //only get third digit of score
+	
 	//redundancy
 	if (tens < 0){
 		tens = 0;
