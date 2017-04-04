@@ -8,6 +8,8 @@ extern volatile int currentDirection;
 
 volatile int foodXCoordinate;
 volatile int foodYCoordinate;
+extern volatile int counter;
+
 #if !defined(NEG_X) || !defined(POS_X) || !defined(NEG_Y) || !defined(POS_Y)
 	#define POS_X 1
 	#define NEG_X 2
@@ -244,6 +246,12 @@ void checkForFoodCollision(){
 		generateFood(head);
 		//drawScore(67,2);
 		setScore();
+		counter = counter - counter/10;
+		volatile int * interval_timer_ptr = (int *) 0xFF202000; // interval timer base address
+		*(interval_timer_ptr + 0x2) = (counter & 0xFFFF);
+		*(interval_timer_ptr + 0x3) = (counter >> 16) & 0xFFFF;
+		/* start interval timer, enable its interrupts */
+		*(interval_timer_ptr + 1) = 0x7; // STOP = 0, START = 1, CONT = 1, ITO = 1
 	}
 	
 }
