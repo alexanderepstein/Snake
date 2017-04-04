@@ -11,6 +11,8 @@ int score = 900;
 int counter = 0;
 extern volatile int playAgain;
 
+
+
 void interval_timer_isr(){
 
 	volatile int * interval_timer_ptr = (int *) 0xFF202000; // interval timer base address
@@ -22,19 +24,11 @@ void interval_timer_isr(){
 		if (start) //check if the game has started
 		{
 		  //insertLink(head);
-		  move(head); //move the snake;
-		  drawScore(67, 2);
-		  score--;
-		  ++counter;
-		  if (counter >=10){
-			counter = 0;
-			drawScore(67, 2);
-			score--;
-		  }
+		  move(head); //move the snake
 		  //recolorHead(head);
 		}
 
-		
+		//Called when game needs to be replayed
 		if (playAgain && start){
 			printf("REINIT");
 			playAgain = 0;
@@ -44,18 +38,6 @@ void interval_timer_isr(){
 		timerThread = 0; //set the timer thread to not running
 		return;
 
-		
-	/*
-	if (start ==1)
-	{
-		move(head);
-	}
-	if (counter == 10){
-		insertLink(head); //adding another link
-	}*/
-	//while(1){
-
-	//	clearscreen();
-
+	
 	}
 }

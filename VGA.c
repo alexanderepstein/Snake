@@ -9,6 +9,7 @@ volatile int * HEX3_HEX0_ptr = (int *) 0xFF200020;
 extern short backgroundColor;
 extern volatile int start, playAgain;
 
+extern volatile int score = 0;
 /*
 * 1. Draw a horizontal line in the center of the screen
   2. Move the line up by an increment of 1
@@ -31,18 +32,7 @@ extern volatile int timeout;					// used to synchronize with the timer
 /* For DE0-CV
 *
 */
-void setScore()
-{
-	int a, b , c, d;
-	int temp = score;
-	a = temp / 1000;
-	temp = score - a*1000;
-	b = temp / 100;
-	temp = temp - b*100;
-	c = temp / 10;
-	d = temp - c*10;
-	*HEX3_HEX0_ptr = (Numbers[a] << 24) | (Numbers[b] << 16) | (Numbers[c] << 8) | Numbers[d];
-}
+
 void drawpixel(int x_vga, int y_vga, short color){
 	volatile short *pixel_address = (volatile short*)(0x08000000 + (y_vga<<10) + (x_vga<<1));
     *pixel_address = color;
@@ -152,7 +142,7 @@ void drawScore(int x, int y){
 	int ones = score%10; //only get first digit of score
 	int tens = (score%100 - ones) / 10; //only get second digit of score
 	int hundreds = (score%1000 - tens - ones) /100; //only get third digit of score
-	
+
 	//redundancy
 	if (tens < 0){
 		tens = 0;
@@ -174,3 +164,14 @@ void finishGame(){
 	playAgain = 1;
 }
 
+void setScore()
+{
+	int  b , c, d;
+	int temp = score;
+	b = temp / 100;
+	temp = temp - b*100;
+	c = temp / 10;
+	d = temp - c*10;
+	*HEX3_HEX0_ptr = (Numbers[b] << 16) | (Numbers[c] << 8) | Numbers[d];
+	drawScore(67,2);
+}

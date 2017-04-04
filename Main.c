@@ -32,7 +32,8 @@ void initialization()
 	VGA_text(37,2,snakeText);
 	VGA_text(61, 2,scoreText);
 	buildWall(wallColor);
-    initSnake();
+	setScore();
+  initSnake();
 	generateFood(head);
 	printf("Game Initialization complete \n");
 }
