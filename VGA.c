@@ -139,7 +139,7 @@ void drawScore(int x, int y){
 	int ones = score%10; //only get first digit of score
 	int tens = (score%100 - ones) / 10; //only get second digit of score
 	int hundreds = (score%1000 - tens - ones) /100; //only get third digit of score
-	
+
 	//redundancy
 	if (tens < 0){
 		tens = 0;
@@ -166,5 +166,5 @@ void setScore()
 	c = temp / 10;
 	d = temp - c*10;
 	*HEX3_HEX0_ptr = (Numbers[a] << 24) | (Numbers[b] << 16) | (Numbers[c] << 8) | Numbers[d];
-	drawScore(score,67,2);
+	drawScore(67,2);
 }
