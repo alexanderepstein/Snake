@@ -7,8 +7,8 @@ extern volatile int yPos, currentDirection, start, pushButtonThread;
 ********************************************************************************/
 volatile int timerThread = 0;
 extern volatile struct Snake *head;
-int score = 900;
-int counter = 0;
+
+
 
 void interval_timer_isr(){
 
@@ -21,15 +21,7 @@ void interval_timer_isr(){
 		if (start) //check if the game has started
 		{
 		  //insertLink(head);
-		  move(head); //move the snake;
-		  drawScore(score, 67, 2);
-		  score--;
-		  ++counter;
-		  if (counter >=10){
-			counter = 0;
-			drawScore(score, 67, 2);
-			score--;
-		  }
+		  move(head); //move the snake
 		  //recolorHead(head);
 		}
 
