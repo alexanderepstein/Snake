@@ -7,8 +7,6 @@ extern volatile int yPos, currentDirection, start, pushButtonThread;
 ********************************************************************************/
 volatile int timerThread = 0;
 extern volatile struct Snake *head;
-int score = 900;
-int counter = 0;
 extern volatile int playAgain;
 
 

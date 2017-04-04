@@ -9,7 +9,7 @@ volatile int * HEX3_HEX0_ptr = (int *) 0xFF200020;
 extern short backgroundColor;
 extern volatile int start, playAgain;
 
-extern volatile int score = 0;
+volatile int score = 0;
 /*
 * 1. Draw a horizontal line in the center of the screen
   2. Move the line up by an increment of 1

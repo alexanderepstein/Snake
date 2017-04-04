@@ -159,7 +159,7 @@ void generateFood(struct Snake *top){
  * Prventing leaks.
 */
  void deleteSnake(struct Snake *top){
-	 printf("Deleting snake");
+	 printf("Deleting snake\n");
 	 struct Node *currentLink = top->firstNode;
 	 //get to the end of the list
 	 while (currentLink->next !=0){
@@ -179,7 +179,7 @@ void generateFood(struct Snake *top){
 		currentLink = temp; //slide our tracking variable
 	}
 	
-	//If I still want the head DO NOT EXECUTE THIS.
+	//If I still want the head DO NOT EXECUTE THIS. Forcibly dumping all pointer references as C can retain these after I free the memory
 	fillSquare(currentLink->xPosition-1, currentLink->xPosition+1, currentLink->yPosition-1, currentLink->yPosition+1, backgroundColor); //set pixels back to regular
 	currentLink->next = 0;
 	currentLink->previous = 0;
@@ -191,7 +191,7 @@ void generateFood(struct Snake *top){
 	//Dave you might want the snake to stay
 	free(currentLink); //last link
 	free(top); //dump the pointer at the head of the snake
-	printf("Game Complete");
+	printf("Game Complete\n");
 	finishGame();
  }
  
