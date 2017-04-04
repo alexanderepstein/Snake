@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include "nios2_ctrl_reg_macros.h"
 
+#define ASCII_NUM_SHIFT 48
 /*
 * 1. Draw a horizontal line in the center of the screen
   2. Move the line up by an increment of 1
@@ -119,7 +120,7 @@ void clearText()
 			offset = (j << 7) + (i); //how its stored as address y gets shifted up 7.
 
 				//while text has stuff
-			*(character_buffer + offset) = 0;	// write to the character buffer
+			*(character_buffer + offset) = 0x00;	// write to the character buffer
 			//++offset;
 
 		}
@@ -127,9 +128,27 @@ void clearText()
 
 }
 
-/* Draw a single character on the screen */
+//67,68,69
+void drawScore(int score, int x, int y){
+	//printf("Updating score of %d\n", score);
+	int ones = score%10; //only get first digit of score
+	int tens = (score%100 - ones) / 10; //only get second digit of score
+	int hundreds = (score%1000 - tens - ones) /100; //only get third digit of score
+	
+	//redundancy
+	if (tens < 0){
+		tens = 0;
+	}
+	if (hundreds < 0){
+		hundreds = 0;
+	}
 
-/*void drawcharacter(int x_char, int y_char, char mychar){
-	volatile char* character_buffer = (char *) (0x09000000 + (y_char <<7) + x_char);
-	*character_buffer = mychar;
-}*/
+	volatile char * character_buffer = (char *) 0x09000000;	// VGA character buffer
+	int offset = (y << 7) + (x); //how its stored as address y gets shifted up 7.
+	*(character_buffer + offset) = (unsigned char) (hundreds + ASCII_NUM_SHIFT);	//shift slides up our min to be 48 or the ASCII of 0
+	*(character_buffer + offset + 1) = (unsigned char) (tens + ASCII_NUM_SHIFT);
+	*(character_buffer + offset + 2) = (unsigned char) (ones + ASCII_NUM_SHIFT);
+	
+
+}
+
