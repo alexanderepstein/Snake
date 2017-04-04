@@ -22,12 +22,12 @@ void interval_timer_isr(){
 		{
 		  //insertLink(head);
 		  move(head); //move the snake;
-		  drawScore(score, 67, 2);
+		  drawScore(67, 2);
 		  score--;
 		  ++counter;
 		  if (counter >=10){
 			counter = 0;
-			drawScore(score, 67, 2);
+			drawScore(67, 2);
 			score--;
 		  }
 		  //recolorHead(head);

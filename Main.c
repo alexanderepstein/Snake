@@ -28,10 +28,11 @@ void initialization()
 	clearscreen();
 	clearText();
 	char snakeText[10] = "Snake\0";
+	char scoreText[10] = "Score\0";
 	VGA_text(37,2,snakeText);
+	VGA_text(61, 2,scoreText);
 	buildWall(wallColor);
-	setScore();
-  initSnake();
+    initSnake();
 	generateFood(head);
 	printf("Game Initialization complete \n");
 }
@@ -43,7 +44,7 @@ int main(void){
   volatile int * interval_timer_ptr = (int *) 0xFF202000; // interval timer base address
   volatile int * KEY_ptr = (int *) 0xFF200050; // pushbutton KEY address
   /* set the interval timer period for scrolling the HEX displays */
-  int counter = 3000000; // 1/(100 MHz) × (5000000) = 50 msec
+  int counter = 3500000; // 1/(100 MHz) × (5000000) = 50 msec
   *(interval_timer_ptr + 0x2) = (counter & 0xFFFF);
   *(interval_timer_ptr + 0x3) = (counter >> 16) & 0xFFFF;
   /* start interval timer, enable its interrupts */
