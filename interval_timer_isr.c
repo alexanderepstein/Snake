@@ -1,26 +1,43 @@
 #include "stdio.h"
 
-int temp;
-extern volatile int yPos, currentDirection, start;
+
+extern volatile int yPos, currentDirection, start, pushButtonThread;
 /********************************************************************************
 * Interval timer interrupt service routine
 ********************************************************************************/
-
+volatile int timerThread = 0;
 extern volatile struct Snake *head;
+int score = 900;
+int counter = 0;
+extern volatile int playAgain;
+
+
 
 void interval_timer_isr(){
 
 	volatile int * interval_timer_ptr = (int *) 0xFF202000; // interval timer base address
 	*(interval_timer_ptr) = 0; // clear the interrupt
-
-	if (start ==1)
+	if (!pushButtonThread && !timerThread) //check if timer and push button threads are not running
 	{
-		move(head);
+
+		timerThread =1; //set timer thread to running
+		if (start) //check if the game has started
+		{
+		  //insertLink(head);
+		  move(head); //move the snake
+		  //recolorHead(head);
+		}
+
+		//Called when game needs to be replayed
+		if (playAgain && start){
+			printf("REINIT");
+			playAgain = 0;
+			initialization();
+		}
+
+		timerThread = 0; //set the timer thread to not running
+		return;
+
+	
 	}
-	//while(1){
-
-	//	clearscreen();
-
-
-
 }

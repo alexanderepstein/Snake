@@ -3,10 +3,11 @@ int currentXvalueOfHead = head->firstNode->xPosition;
 int currentYvalueOfHead = head->firstNode->yPosition;
 
 checktokillSnake(currentXvalueOfHead, currentYvalueOfHead);
+checkForFoodCollision(currentXvalueOfHead, currentYvalueOfHead);
 
 void checktokillSnake(int x, int y){
 	
-	if(x<=0 || x>=318 || y<=0 || y>=239){
+	if(x<=1 || x>=317 || y<=21 || y>=238){
 		//kill snake
 		deleteSnake(head);
 		break;
@@ -30,3 +31,25 @@ void checktokillSnake(int x, int y){
 		}
 	}
 }
+
+void checkForFoodCollision(int xMiddleOfHead, int yMiddleOfHead, int foodXMiddle, int foodYMiddle){
+	
+	//check to see if any of the x values of the head (xmiddle -1 through xmiddle+1) equal any x values of the food
+	for(int i=xMiddleOfHead-1; i<=xMiddleOfHead+1; i++){
+		if(i==foodXMiddle-1 || i==foodXMiddle || i==foodXMiddle+1){
+			//add link
+			//update score
+		}
+	}
+	
+	//same for y values
+	for(int i=yMiddleOfHead-1; i<=yMiddleOfHead+1; i++){
+		if(i==foodYMiddle-1 || i==foodYMiddle || i==foodYMiddle+1){
+			//add link
+			//update score
+		}
+	}
+	
+	
+	
+
