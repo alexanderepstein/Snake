@@ -9,6 +9,7 @@ volatile int timerThread = 0;
 extern volatile struct Snake *head;
 int score = 900;
 int counter = 0;
+extern volatile int playAgain;
 
 void interval_timer_isr(){
 
@@ -33,9 +34,17 @@ void interval_timer_isr(){
 		  //recolorHead(head);
 		}
 
+		
+		if (playAgain && start){
+			printf("REINIT");
+			playAgain = 0;
+			initialization();
+		}
+
 		timerThread = 0; //set the timer thread to not running
 		return;
 
+		
 	/*
 	if (start ==1)
 	{

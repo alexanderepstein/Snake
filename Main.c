@@ -6,7 +6,7 @@
 //volatile int direction = 1;
 volatile int currentDirection = 1;
 volatile int yPos = 120;
-volatile int start = 0;
+volatile int start = 0, playAgain = 0;
 const short wallColor = (short) 0b1111100000000000;
 extern volatile struct Snake *head;
 
@@ -44,7 +44,7 @@ int main(void){
   volatile int * interval_timer_ptr = (int *) 0xFF202000; // interval timer base address
   volatile int * KEY_ptr = (int *) 0xFF200050; // pushbutton KEY address
   /* set the interval timer period for scrolling the HEX displays */
-  int counter = 3500000; // 1/(100 MHz) × (5000000) = 50 msec
+  int counter = 4000000; // 1/(100 MHz) × (5000000) = 50 msec
   *(interval_timer_ptr + 0x2) = (counter & 0xFFFF);
   *(interval_timer_ptr + 0x3) = (counter >> 16) & 0xFFFF;
   /* start interval timer, enable its interrupts */
@@ -57,6 +57,14 @@ int main(void){
 
 
   initialization();
-
+  /* Test code for deleting memory
+	insertLink(head);
+	insertLink(head);
+	insertLink(head);
+	insertLink(head);
+	insertLink(head);
+	
+  deleteSnake(head);
+*/
   while(1); // main program simply idles
 }

@@ -12,6 +12,7 @@ extern volatile int start, timerThread;
 int press;
 
 
+
 /********************************************************************************
 * Pushbutton - Interrupt Service Routine
 *
@@ -72,7 +73,7 @@ if you can the direction will be changed, if not the isr will essentially do not
 		{
 		currentDirection = 4;
 		printf("Fourth button \n");
-		//insertLink(head); //used for debugging to control the size of the snake manually
+		insertLink(head); //used for debugging to control the size of the snake manually
 
 	  }
 

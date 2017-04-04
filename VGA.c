@@ -6,6 +6,8 @@ extern volatile int score;
 int Numbers[10] = {0b0111111,0b0000110,0b1011011,0b1001111,0b1100110,0b1101101,0b1111101,0b0000111,0b1111111,0b1100111};
 
 volatile int * HEX3_HEX0_ptr = (int *) 0xFF200020;
+extern short backgroundColor;
+extern volatile int start, playAgain;
 
 /*
 * 1. Draw a horizontal line in the center of the screen
@@ -119,7 +121,7 @@ void clearscreen (){
 	int x_vga, y_vga;
 	for (x_vga = 0; x_vga <=319; x_vga = x_vga + 1){
 		for (y_vga = 0; y_vga <=239; y_vga = y_vga + 1){
-			drawpixel(x_vga, y_vga, 0x0);
+			drawpixel(x_vga, y_vga, backgroundColor);
 		}
 	}
 }
@@ -164,7 +166,11 @@ void drawScore(int x, int y){
 	*(character_buffer + offset) = (unsigned char) (hundreds + ASCII_NUM_SHIFT);	//shift slides up our min to be 48 or the ASCII of 0
 	*(character_buffer + offset + 1) = (unsigned char) (tens + ASCII_NUM_SHIFT);
 	*(character_buffer + offset + 2) = (unsigned char) (ones + ASCII_NUM_SHIFT);
-	
+}
 
+void finishGame(){
+	start = 0;
+	VGA_text(35,30, "You lost!");
+	playAgain = 1;
 }
 

@@ -1,8 +1,9 @@
 #include <stdlib.h>
 #include <stdio.h>
-short bodyColor = (short) 0b0000011111100000;
-short headColor = (short) 0b1111100000000000;
+const short bodyColor = (short) 0b0000011111100000;
+const short headColor = (short) 0b1111100000000000;
 const short foodColor = (short) 0b11111111111000000; //yellow
+const short backgroundColor = (short) (0b0000000000000111); //sorta blueish
 extern volatile int currentDirection;
 
 #if !defined(NEG_X) || !defined(POS_X) || !defined(NEG_Y) || !defined(POS_Y)
@@ -89,7 +90,7 @@ void move(struct Snake *top){
 		currentLink = currentLink->next;
 	}
 	//at this point I have reached the end of the list
-	fillSquare(currentLink->xPosition-1, currentLink->xPosition+1, currentLink->yPosition-1, currentLink->yPosition+1, 0x0); //set the tail to be uncolored
+	fillSquare(currentLink->xPosition-1, currentLink->xPosition+1, currentLink->yPosition-1, currentLink->yPosition+1, backgroundColor); //set the tail to be uncolored
 
 	//advance position of tail to be where the head was
 	currentLink->xPosition = top->firstNode->xPosition;
@@ -156,8 +157,9 @@ void generateFood(struct Snake *top){
 /**
  * Function for deleting all of the snake's dynamic memory.
  * Prventing leaks.
-
+*/
  void deleteSnake(struct Snake *top){
+	 printf("Deleting snake");
 	 struct Node *currentLink = top->firstNode;
 	 //get to the end of the list
 	 while (currentLink->next !=0){
@@ -169,10 +171,28 @@ void generateFood(struct Snake *top){
 	while(currentLink->previous !=0){
 		temp = currentLink; //set temporary pointer
 		temp = currentLink->previous; //go back one
+		fillSquare(currentLink->xPosition-1, currentLink->xPosition+1, currentLink->yPosition-1, currentLink->yPosition+1, backgroundColor); //set pixels back to regular
+		currentLink->next = 0;
+		currentLink->previous = 0;
+		//Dave you might want the snake to stay
 		free(currentLink); //delete the current one
 		currentLink = temp; //slide our tracking variable
 	}
+	
+	//If I still want the head DO NOT EXECUTE THIS.
+	fillSquare(currentLink->xPosition-1, currentLink->xPosition+1, currentLink->yPosition-1, currentLink->yPosition+1, backgroundColor); //set pixels back to regular
+	currentLink->next = 0;
+	currentLink->previous = 0;
+	top->firstNode->next = 0;
+	top->firstNode->previous =0;
+	free(top->firstNode);
+	top->firstNode = 0;
+	currentLink->previous = 0;
+	//Dave you might want the snake to stay
 	free(currentLink); //last link
 	free(top); //dump the pointer at the head of the snake
+	printf("Game Complete");
+	finishGame();
  }
- */
+ 
+ 
