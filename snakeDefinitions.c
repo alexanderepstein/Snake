@@ -6,6 +6,8 @@ const short foodColor = (short) 0b11111111111000000; //yellow
 const short backgroundColor = (short) (0b0000000000000111); //sorta blueish
 extern volatile int currentDirection;
 
+volatile int foodXCoordinate;
+volatile int foodYCoordinate;
 #if !defined(NEG_X) || !defined(POS_X) || !defined(NEG_Y) || !defined(POS_Y)
 	#define POS_X 1
 	#define NEG_X 2
@@ -132,8 +134,6 @@ void move(struct Snake *top){
  */
 void generateFood(struct Snake *top){
 	int conflict = 1;
-	int foodXCoordinate;
-	int foodYCoordinate;
 	while (conflict){
 		conflict = 0;
 		//plus 1 is for wall offset
@@ -196,3 +196,69 @@ void generateFood(struct Snake *top){
  }
  
  
+ 
+ 
+extern volatile int score;
+
+int checkWallCollision();
+
+
+void checktokillSnake(){
+	int currentXvalueOfHead = head->firstNode->xPosition;
+	int currentYvalueOfHead = head->firstNode->yPosition;
+	if(checkWallCollision()){
+		return;
+	}
+	/*to advance a list
+	set up node*/
+	//                                            list still has more stuff.     //advance where we are looking in the list
+	
+	//only have head exit
+	if (head->firstNode->next==0 || head->firstNode == 0){
+		return;
+	}
+	for (struct Node *node = head->firstNode->next; node->next != 0; node = node->next){
+		//instantiate node as next thing after head
+		//get x and y value of the current node
+		int currentXvalueOfBody = node->xPosition;
+		int currentYvalueOfBody = node->yPosition;	
+			
+		//if the current node position equals the current positon of the snakes head, kill the snake
+		if (currentXvalueOfBody==currentXvalueOfHead && currentYvalueOfBody==currentYvalueOfHead){
+			//kill snake
+			deleteSnake(head);
+			return;
+		}
+	}
+}
+
+void checkForFoodCollision(){
+	struct Node *top = head->firstNode;
+	int xMiddleOfHead = top->xPosition;
+	int yMiddleOfHead = top->yPosition;
+	if ((xMiddleOfHead >= foodXCoordinate-1) && (xMiddleOfHead <= foodXCoordinate+1) && (yMiddleOfHead >= foodYCoordinate-1) && (yMiddleOfHead <= foodYCoordinate+1)){
+		//collision with food has occured
+		insertLink(head);
+		score++;
+		fillSquare(foodXCoordinate-1, foodXCoordinate+1, foodYCoordinate-1, foodYCoordinate+1, backgroundColor);
+		generateFood(head);
+		//drawScore(67,2);
+		setScore();
+	}
+	
+}
+
+int checkWallCollision(){
+	if(head->firstNode->xPosition<=1 || head->firstNode->xPosition>=317 || head->firstNode->yPosition<=21 || head->firstNode->yPosition>=238){
+		//kill snake
+		deleteSnake(head);
+		return 1;
+	}else {
+		return 0;
+	}
+}
+	
+	
+	
+
+

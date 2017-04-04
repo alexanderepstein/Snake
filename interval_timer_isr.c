@@ -22,11 +22,14 @@ void interval_timer_isr(){
 		if (start) //check if the game has started
 		{
 		  //insertLink(head);
+		  checktokillSnake();
+		  checkForFoodCollision();
 		  move(head); //move the snake
 		  //recolorHead(head);
 		}
 
 		//Called when game needs to be replayed
+		//printf("My play again is %d", playAgain);
 		if (playAgain && start){
 			printf("REINIT");
 			playAgain = 0;
