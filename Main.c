@@ -28,10 +28,9 @@ void initialization()
 	clearscreen();
 	clearText();
 	char snakeText[10] = "Snake\0";
-	char scoreText[10] = "Score\0";
 	VGA_text(37,2,snakeText);
-	VGA_text(60, 2,scoreText);
 	buildWall(wallColor);
+	setScore();
   initSnake();
 	generateFood(head);
 	printf("Game Initialization complete \n");
