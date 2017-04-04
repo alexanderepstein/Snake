@@ -7,7 +7,7 @@ extern volatile int yPos, currentDirection, start, pushButtonThread;
 ********************************************************************************/
 volatile int timerThread = 0;
 extern volatile struct Snake *head;
-extern volatile int playAgain;
+extern volatile int playAgain, welcome;
 
 
 
@@ -19,22 +19,25 @@ void interval_timer_isr(){
 	{
 
 		timerThread =1; //set timer thread to running
-		if (start) //check if the game has started
-		{
-		  //insertLink(head);
-		  checktokillSnake();
-		  checkForFoodCollision();
-		  move(head); //move the snake
-		  //recolorHead(head);
-		}
-
+		
 		//Called when game needs to be replayed
-		//printf("My play again is %d", playAgain);
 		if (playAgain && start){
 			printf("REINIT");
 			playAgain = 0;
 			initialization();
 		}
+		
+		if (start && head!=0 && !playAgain && welcome == 0) //check if the game has started
+		{
+		  //insertLink(head);
+		  if (!checktokillSnake()){
+			checkForFoodCollision();  
+			move(head); //move the snake
+		  }
+		 
+		}
+
+
 
 		timerThread = 0; //set the timer thread to not running
 		return;

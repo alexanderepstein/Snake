@@ -166,6 +166,7 @@ void generateFood(struct Snake *top){
 	 //get to the end of the list
 	 while (currentLink->next !=0){
 		currentLink = currentLink->next;
+		printf("Stuck 1");
 	}
 	struct Node *temp; //temporay pointer that will store an additional link to prevent orphaning
 
@@ -179,6 +180,7 @@ void generateFood(struct Snake *top){
 		//Dave you might want the snake to stay
 		free(currentLink); //delete the current one
 		currentLink = temp; //slide our tracking variable
+		printf("Stuck 2");
 	}
 	
 	//If I still want the head DO NOT EXECUTE THIS. Forcibly dumping all pointer references as C can retain these after I free the memory
@@ -188,10 +190,13 @@ void generateFood(struct Snake *top){
 	top->firstNode->next = 0;
 	top->firstNode->previous =0;
 	free(top->firstNode);
+	printf("Stuck 3");
 	top->firstNode = 0;
 	currentLink->previous = 0;
+	printf("Stuck 5");
 	//Dave you might want the snake to stay
 	free(currentLink); //last link
+	printf("Stuck 4");
 	free(top); //dump the pointer at the head of the snake
 	printf("Game Complete\n");
 	finishGame();
@@ -205,19 +210,25 @@ extern volatile int score;
 int checkWallCollision();
 
 
-void checktokillSnake(){
+int checktokillSnake(){
+	//redundancy for faults
+	if (head == 0 || head->firstNode == 0){
+		return 1; //shit doesnt exist somthing wrong
+	}
+	
 	int currentXvalueOfHead = head->firstNode->xPosition;
 	int currentYvalueOfHead = head->firstNode->yPosition;
 	if(checkWallCollision()){
-		return;
+		//ie something has happened
+		return 1;
 	}
 	/*to advance a list
 	set up node*/
 	//                                            list still has more stuff.     //advance where we are looking in the list
 	
 	//only have head exit
-	if (head->firstNode->next==0 || head->firstNode == 0){
-		return;
+	if (head->firstNode->next==0 || head->firstNode == 0 || head == 0){
+		return 0; //no fault
 	}
 	for (struct Node *node = head->firstNode->next; node->next != 0; node = node->next){
 		//instantiate node as next thing after head
@@ -229,9 +240,10 @@ void checktokillSnake(){
 		if (currentXvalueOfBody==currentXvalueOfHead && currentYvalueOfBody==currentYvalueOfHead){
 			//kill snake
 			deleteSnake(head);
-			return;
+			return 1; //colllsion
 		}
 	}
+	return 0;
 }
 
 void checkForFoodCollision(){
@@ -257,8 +269,13 @@ void checkForFoodCollision(){
 }
 
 int checkWallCollision(){
+	if (head == 0 || head->firstNode == 0){
+		return;
+	}
+	
 	if(head->firstNode->xPosition<=1 || head->firstNode->xPosition>=317 || head->firstNode->yPosition<=21 || head->firstNode->yPosition>=238){
 		//kill snake
+		printf("Walls break");
 		deleteSnake(head);
 		return 1;
 	}else {

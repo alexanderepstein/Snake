@@ -8,7 +8,7 @@
 volatile int currentDirection;
 volatile int pushButtonThread = 0;
 extern volatile struct Snake *head;
-extern volatile int start, timerThread;
+extern volatile int start, timerThread, welcome;
 int press;
 
 
@@ -20,6 +20,14 @@ int press;
 * variable KEY_PRESSED.
 ********************************************************************************/
 void pushbutton_ISR( void ) {
+	
+	if (welcome ==1)
+	{
+		clearText();
+		setInfoBar();
+		welcome = 0;
+		return;
+	}
 start =1;
 volatile int * KEY_ptr = (int *) 0xFF200050;
 

@@ -9,7 +9,7 @@ volatile int yPos = 120;
 volatile int start = 0, playAgain = 0;
 const short wallColor = (short) 0b1111100000000000;
 extern volatile struct Snake *head;
-
+volatile int welcome = 1;
 int counter = 6000000; // 1/(100 MHz) × (5000000) = 50 msec
 
 
@@ -26,20 +26,36 @@ int counter = 6000000; // 1/(100 MHz) × (5000000) = 50 msec
 * KEY[3]: stops the rotation
 ********************************************************************************/
 
-void initialization()
+void setInfoBar()
 {
-	clearscreen();
-	clearText();
 	char snakeText[10] = "Snake\0";
 	char scoreText[10] = "Score\0";
 	VGA_text(37,2,snakeText);
 	VGA_text(61, 2,scoreText);
+}
+
+void welcomeScreen()
+{
+	char welcomeText[] = "Welcome to Snake!\0";
+	char howToStart[] = "Press any button to start.\0";
+	VGA_text(33,24,welcomeText);
+	VGA_text(29, 32,howToStart);
+}
+
+void initialization()
+{
+	clearscreen();
+	clearText();
+	welcomeScreen();
+	setInfoBar();
 	buildWall(wallColor);
 	setScore();
-  initSnake();
+    initSnake();
 	generateFood(head);
 	printf("Game Initialization complete \n");
 }
+
+
 
 
 int main(void){

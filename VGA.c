@@ -161,6 +161,7 @@ void drawScore(int x, int y){
 void finishGame(){
 	start = 0;
 	VGA_text(35,30, "You lost!");
+	printf("Finishing game");
 	playAgain = 1;
 }
 
