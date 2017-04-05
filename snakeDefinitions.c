@@ -147,7 +147,7 @@ void generateFood(struct Snake *top){
 
 		//check for conflicts
 		for (struct Node *temp = top->firstNode; temp->next != 0; temp = temp->next){
-			if ((temp->xPosition >= foodXCoordinate-2) && (temp->xPosition <= foodXCoordinate+2) && (temp->yPosition >= foodYCoordinate-2) && (temp->yPosition <= foodYCoordinate+2){
+			if ((temp->xPosition >= foodXCoordinate-2) && (temp->xPosition <= foodXCoordinate+2) && (temp->yPosition >= foodYCoordinate-2) && (temp->yPosition <= foodYCoordinate+2)){
 				//conflict
 				conflict = 1;
 				break;
@@ -176,7 +176,7 @@ void generateFood(struct Snake *top){
 	while(currentLink->previous !=0){
 		temp = currentLink; //set temporary pointer
 		temp = currentLink->previous; //go back one
-		fillSquare(currentLink->xPosition-1, currentLink->xPosition+1, currentLink->yPosition-1, currentLink->yPosition+1, backgroundColor); //set pixels back to regular
+		//fillSquare(currentLink->xPosition-1, currentLink->xPosition+1, currentLink->yPosition-1, currentLink->yPosition+1, backgroundColor); //set pixels back to regular
 		currentLink->next = 0;
 		currentLink->previous = 0;
 		//Dave you might want the snake to stay
@@ -185,7 +185,7 @@ void generateFood(struct Snake *top){
 	}
 	
 	//If I still want the head DO NOT EXECUTE THIS. Forcibly dumping all pointer references as C can retain these after I free the memory
-	fillSquare(currentLink->xPosition-1, currentLink->xPosition+1, currentLink->yPosition-1, currentLink->yPosition+1, backgroundColor); //set pixels back to regular
+	//fillSquare(currentLink->xPosition-1, currentLink->xPosition+1, currentLink->yPosition-1, currentLink->yPosition+1, backgroundColor); //set pixels back to regular
 	currentLink->next = 0;
 	currentLink->previous = 0;
 	top->firstNode->next = 0;
