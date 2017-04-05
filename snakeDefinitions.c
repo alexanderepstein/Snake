@@ -73,14 +73,14 @@ void insertLink(struct Snake *top){
 
 	//can do preincrement / decrement for efficiency later on
 	if (currentDirection == POS_X){
-		top->firstNode->xPosition = (top->firstNode->xPosition + 2);
+		top->firstNode->xPosition = (top->firstNode->xPosition + 3);
 	}else if (currentDirection == NEG_X){
-		top->firstNode->xPosition = (top->firstNode->xPosition - 2);
+		top->firstNode->xPosition = (top->firstNode->xPosition - 3);
 	}else if (currentDirection == POS_Y){
 		//NOTE A POSITIVE Y IS TECHNICALLY DOWN
-		top->firstNode->yPosition = (top->firstNode->yPosition + 2);
+		top->firstNode->yPosition = (top->firstNode->yPosition + 3);
 	}else if (currentDirection == NEG_Y){
-		top->firstNode->yPosition = (top->firstNode->yPosition + -2);
+		top->firstNode->yPosition = (top->firstNode->yPosition -3);
 	}
 	fillSquare(top->firstNode->xPosition-1, top->firstNode->xPosition+1, top->firstNode->yPosition-1, top->firstNode->yPosition+1, headColor); //color the new head
 }
@@ -119,15 +119,15 @@ void move(struct Snake *top){
 	}
 	//can do preincrement / decrement for efficiency later on
 	if (currentDirection == POS_X){
-		top->firstNode->xPosition = top->firstNode->xPosition + 2;
+		top->firstNode->xPosition = top->firstNode->xPosition + 3;
 	}else if (currentDirection == NEG_X){
-		top->firstNode->xPosition = top->firstNode->xPosition - 2;
+		top->firstNode->xPosition = top->firstNode->xPosition - 3;
 	}else if (currentDirection == POS_Y){
 		//NOTE A POSITIVE Y IS TECHNICALLY DOWN
-		top->firstNode->yPosition = top->firstNode->yPosition + 2;
+		top->firstNode->yPosition = top->firstNode->yPosition + 3;
 	}else if (currentDirection == NEG_Y){
 		//NOTE A NEGATIVE Y IS TECHNICALLY UP
-		top->firstNode->yPosition = top->firstNode->yPosition - 2;
+		top->firstNode->yPosition = top->firstNode->yPosition - 3;
 	}
 	//draw the new head position
 	fillSquare(top->firstNode->xPosition-1, top->firstNode->xPosition+1, top->firstNode->yPosition-1, top->firstNode->yPosition+1, headColor); //color the new head position
@@ -147,7 +147,7 @@ void generateFood(struct Snake *top){
 
 		//check for conflicts
 		for (struct Node *temp = top->firstNode; temp->next != 0; temp = temp->next){
-			if (temp->xPosition == foodXCoordinate && temp->yPosition == foodYCoordinate){
+			if ((temp->xPosition >= foodXCoordinate-2) && (temp->xPosition <= foodXCoordinate+2) && (temp->yPosition >= foodYCoordinate-2) && (temp->yPosition <= foodYCoordinate+2){
 				//conflict
 				conflict = 1;
 				break;
