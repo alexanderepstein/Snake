@@ -11,6 +11,7 @@ const short wallColor = (short) 0b1111100000000000;
 extern volatile struct Snake *head;
 volatile int welcome = 1;
 int counter = 6000000; // 1/(100 MHz) × (5000000) = 50 msec
+extern int score;
 
 
 /********************************************************************************
@@ -44,6 +45,16 @@ void welcomeScreen()
 
 void initialization()
 {
+	score = 0;
+	counter = 6000000; 
+    volatile int * interval_timer_ptr = (int *) 0xFF202000; // interval timer base address
+
+    /* set the interval timer period for iterating game */
+    *(interval_timer_ptr + 0x2) = (counter & 0xFFFF);
+    *(interval_timer_ptr + 0x3) = (counter >> 16) & 0xFFFF;
+    /* start interval timer, enable its interrupts */
+    *(interval_timer_ptr + 1) = 0x7; // STOP = 0, START = 1, CONT = 1, ITO = 1
+	
 	clearscreen();
 	clearText();
 	welcomeScreen();
@@ -63,7 +74,6 @@ int main(void){
   * will be used to access these pointer locations instead of regular memory loads and stores) */
   volatile int * interval_timer_ptr = (int *) 0xFF202000; // interval timer base address
   volatile int * KEY_ptr = (int *) 0xFF200050; // pushbutton KEY address
-  /* set the interval timer period for scrolling the HEX displays */
   *(interval_timer_ptr + 0x2) = (counter & 0xFFFF);
   *(interval_timer_ptr + 0x3) = (counter >> 16) & 0xFFFF;
   /* start interval timer, enable its interrupts */

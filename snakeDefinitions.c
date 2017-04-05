@@ -166,7 +166,6 @@ void generateFood(struct Snake *top){
 	 //get to the end of the list
 	 while (currentLink->next !=0){
 		currentLink = currentLink->next;
-		printf("Stuck 1");
 	}
 	struct Node *temp; //temporay pointer that will store an additional link to prevent orphaning
 
@@ -180,7 +179,6 @@ void generateFood(struct Snake *top){
 		//Dave you might want the snake to stay
 		free(currentLink); //delete the current one
 		currentLink = temp; //slide our tracking variable
-		printf("Stuck 2");
 	}
 	
 	//If I still want the head DO NOT EXECUTE THIS. Forcibly dumping all pointer references as C can retain these after I free the memory
@@ -190,13 +188,10 @@ void generateFood(struct Snake *top){
 	top->firstNode->next = 0;
 	top->firstNode->previous =0;
 	free(top->firstNode);
-	printf("Stuck 3");
 	top->firstNode = 0;
 	currentLink->previous = 0;
-	printf("Stuck 5");
 	//Dave you might want the snake to stay
 	free(currentLink); //last link
-	printf("Stuck 4");
 	free(top); //dump the pointer at the head of the snake
 	printf("Game Complete\n");
 	finishGame();
