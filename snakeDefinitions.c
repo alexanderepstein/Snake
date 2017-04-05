@@ -1,5 +1,8 @@
 #include <stdlib.h>
 #include <stdio.h>
+
+int checkWallCollision();
+
 const short bodyColor = (short) 0b0000011111100000;
 const short headColor = (short) 0b1111100000000000;
 const short foodColor = (short) 0b11111111111000000; //yellow
@@ -11,7 +14,7 @@ extern volatile int currentDirection;
 int foodXCoordinate;
 int foodYCoordinate;
 extern volatile int counter;
-
+extern volatile int score;
 #if !defined(NEG_X) || !defined(POS_X) || !defined(NEG_Y) || !defined(POS_Y)
 	#define POS_X 1
 	#define NEG_X 2
@@ -73,14 +76,14 @@ void insertLink(struct Snake *top){
 
 	//can do preincrement / decrement for efficiency later on
 	if (currentDirection == POS_X){
-		top->firstNode->xPosition = (top->firstNode->xPosition + 3);
+		top->firstNode->xPosition = (top->firstNode->xPosition + 2);
 	}else if (currentDirection == NEG_X){
-		top->firstNode->xPosition = (top->firstNode->xPosition - 3);
+		top->firstNode->xPosition = (top->firstNode->xPosition - 2);
 	}else if (currentDirection == POS_Y){
 		//NOTE A POSITIVE Y IS TECHNICALLY DOWN
-		top->firstNode->yPosition = (top->firstNode->yPosition + 3);
+		top->firstNode->yPosition = (top->firstNode->yPosition + 2);
 	}else if (currentDirection == NEG_Y){
-		top->firstNode->yPosition = (top->firstNode->yPosition -3);
+		top->firstNode->yPosition = (top->firstNode->yPosition -2);
 	}
 	fillSquare(top->firstNode->xPosition-1, top->firstNode->xPosition+1, top->firstNode->yPosition-1, top->firstNode->yPosition+1, headColor); //color the new head
 }
@@ -119,15 +122,15 @@ void move(struct Snake *top){
 	}
 	//can do preincrement / decrement for efficiency later on
 	if (currentDirection == POS_X){
-		top->firstNode->xPosition = top->firstNode->xPosition + 3;
+		top->firstNode->xPosition = top->firstNode->xPosition + 2;
 	}else if (currentDirection == NEG_X){
-		top->firstNode->xPosition = top->firstNode->xPosition - 3;
+		top->firstNode->xPosition = top->firstNode->xPosition - 2;
 	}else if (currentDirection == POS_Y){
 		//NOTE A POSITIVE Y IS TECHNICALLY DOWN
-		top->firstNode->yPosition = top->firstNode->yPosition + 3;
+		top->firstNode->yPosition = top->firstNode->yPosition + 2;
 	}else if (currentDirection == NEG_Y){
 		//NOTE A NEGATIVE Y IS TECHNICALLY UP
-		top->firstNode->yPosition = top->firstNode->yPosition - 3;
+		top->firstNode->yPosition = top->firstNode->yPosition - 2;
 	}
 	//draw the new head position
 	fillSquare(top->firstNode->xPosition-1, top->firstNode->xPosition+1, top->firstNode->yPosition-1, top->firstNode->yPosition+1, headColor); //color the new head position
@@ -183,7 +186,7 @@ void generateFood(struct Snake *top){
 		free(currentLink); //delete the current one
 		currentLink = temp; //slide our tracking variable
 	}
-	
+
 	//If I still want the head DO NOT EXECUTE THIS. Forcibly dumping all pointer references as C can retain these after I free the memory
 	//fillSquare(currentLink->xPosition-1, currentLink->xPosition+1, currentLink->yPosition-1, currentLink->yPosition+1, backgroundColor); //set pixels back to regular
 	currentLink->next = 0;
@@ -201,13 +204,12 @@ void generateFood(struct Snake *top){
 
 	finishGame();
  }
- 
- 
- 
- 
-extern volatile int score;
 
-int checkWallCollision();
+
+
+
+
+
 
 
 int checktokillSnake(){
@@ -215,7 +217,7 @@ int checktokillSnake(){
 	if (head == 0 || head->firstNode == 0){
 		return 1; //shit doesnt exist somthing wrong
 	}
-	
+
 	int currentXvalueOfHead = head->firstNode->xPosition;
 	int currentYvalueOfHead = head->firstNode->yPosition;
 	if(checkWallCollision()){
@@ -225,7 +227,7 @@ int checktokillSnake(){
 	/*to advance a list
 	set up node*/
 	//                                            list still has more stuff.     //advance where we are looking in the list
-	
+
 	//only have head exit
 	if (head->firstNode->next==0 || head->firstNode == 0 || head == 0){
 		return 0; //no fault
@@ -234,10 +236,10 @@ int checktokillSnake(){
 		//instantiate node as next thing after head
 		//get x and y value of the current node
 		int currentXvalueOfBody = node->xPosition;
-		int currentYvalueOfBody = node->yPosition;	
-			
+		int currentYvalueOfBody = node->yPosition;
+
 		//if the current node position equals the current positon of the snakes head, kill the snake
-		if (currentXvalueOfBody==currentXvalueOfHead && currentYvalueOfBody==currentYvalueOfHead){
+		if ((currentXvalueOfBody > currentXvalueOfHead -2) && (currentXvalueOfBody < currentXvalueOfHead +2) && (currentYvalueOfBody>currentYvalueOfHead-2) && (currentYvalueOfBody<currentYvalueOfHead+2)) {
 			//kill snake
 			deleteSnake(head);
 			return 1; //colllsion
@@ -260,21 +262,24 @@ void checkForFoodCollision(){
 		generateFood(head);
 		//drawScore(67,2);
 		setScore();
+		if (score%5 == 0)
+		{
 		counter = counter - counter/10;
+	  }
 		volatile int * interval_timer_ptr = (int *) 0xFF202000; // interval timer base address
 		*(interval_timer_ptr + 0x2) = (counter & 0xFFFF);
 		*(interval_timer_ptr + 0x3) = (counter >> 16) & 0xFFFF;
 		/* start interval timer, enable its interrupts */
 		*(interval_timer_ptr + 1) = 0x7; // STOP = 0, START = 1, CONT = 1, ITO = 1
 	}
-	
+
 }
 
 int checkWallCollision(){
 	if (head == 0 || head->firstNode == 0){
 		return;
 	}
-	
+
 	if(head->firstNode->xPosition<=1 || head->firstNode->xPosition>=317 || head->firstNode->yPosition<=21 || head->firstNode->yPosition>=238){
 		//kill snake
 		deleteSnake(head);
@@ -283,8 +288,3 @@ int checkWallCollision(){
 		return 0;
 	}
 }
-	
-	
-	
-
-
