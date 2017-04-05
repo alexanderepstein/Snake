@@ -21,10 +21,11 @@ int press;
 ********************************************************************************/
 void pushbutton_ISR( void ) {
 	
-	if (welcome ==1)
+	if (welcome == 1)
 	{
 		clearText();
 		setInfoBar();
+		setScore();
 		welcome = 0;
 		return;
 	}

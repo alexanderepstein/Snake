@@ -41,6 +41,7 @@ void welcomeScreen()
 	char howToStart[] = "Press any button to start.\0";
 	VGA_text(33,24,welcomeText);
 	VGA_text(29, 32,howToStart);
+	welcome = 1;
 }
 
 void initialization()
@@ -74,6 +75,7 @@ int main(void){
   * will be used to access these pointer locations instead of regular memory loads and stores) */
   volatile int * interval_timer_ptr = (int *) 0xFF202000; // interval timer base address
   volatile int * KEY_ptr = (int *) 0xFF200050; // pushbutton KEY address
+  /* set the interval timer period for iterating game */
   *(interval_timer_ptr + 0x2) = (counter & 0xFFFF);
   *(interval_timer_ptr + 0x3) = (counter >> 16) & 0xFFFF;
   /* start interval timer, enable its interrupts */
@@ -86,14 +88,6 @@ int main(void){
 
 
   initialization();
-  /* Test code for deleting memory
-	insertLink(head);
-	insertLink(head);
-	insertLink(head);
-	insertLink(head);
-	insertLink(head);
-	
-  deleteSnake(head);
-*/
+
   while(1); // main program simply idles
 }

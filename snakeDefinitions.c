@@ -4,10 +4,12 @@ const short bodyColor = (short) 0b0000011111100000;
 const short headColor = (short) 0b1111100000000000;
 const short foodColor = (short) 0b11111111111000000; //yellow
 const short backgroundColor = (short) (0b0000000000000111); //sorta blueish
+extern const short wallColor;
+
 extern volatile int currentDirection;
 
-volatile int foodXCoordinate;
-volatile int foodYCoordinate;
+int foodXCoordinate;
+int foodYCoordinate;
 extern volatile int counter;
 
 #if !defined(NEG_X) || !defined(POS_X) || !defined(NEG_Y) || !defined(POS_Y)
@@ -135,10 +137,11 @@ void move(struct Snake *top){
  * Function for generating a 1x1 food pixel
  */
 void generateFood(struct Snake *top){
+	printf("Food is redrawn\n");
 	int conflict = 1;
 	while (conflict){
 		conflict = 0;
-		//plus 1 is for wall offset
+		//plus 2 is for wall offset
 		foodXCoordinate = (rand() % 315) + 2;
 		foodYCoordinate = (rand() % 235) + 2;
 
@@ -194,6 +197,8 @@ void generateFood(struct Snake *top){
 	free(currentLink); //last link
 	free(top); //dump the pointer at the head of the snake
 	printf("Game Complete\n");
+	buildWall(wallColor); //fix hole in the wall made by snake colliding and drawing over
+
 	finishGame();
  }
  
@@ -245,7 +250,9 @@ void checkForFoodCollision(){
 	struct Node *top = head->firstNode;
 	int xMiddleOfHead = top->xPosition;
 	int yMiddleOfHead = top->yPosition;
-	if ((xMiddleOfHead >= foodXCoordinate-1) && (xMiddleOfHead <= foodXCoordinate+1) && (yMiddleOfHead >= foodYCoordinate-1) && (yMiddleOfHead <= foodYCoordinate+1)){
+	//check 5x5 box (really 3x3 but it doesnt run properly consistently)
+	if ((xMiddleOfHead >= foodXCoordinate-2) && (xMiddleOfHead <= foodXCoordinate+2) && (yMiddleOfHead >= foodYCoordinate-2) && (yMiddleOfHead <= foodYCoordinate+2)){
+		printf("Food collision\n");
 		//collision with food has occured
 		insertLink(head);
 		score++;
@@ -270,7 +277,6 @@ int checkWallCollision(){
 	
 	if(head->firstNode->xPosition<=1 || head->firstNode->xPosition>=317 || head->firstNode->yPosition<=21 || head->firstNode->yPosition>=238){
 		//kill snake
-		printf("Walls break");
 		deleteSnake(head);
 		return 1;
 	}else {
