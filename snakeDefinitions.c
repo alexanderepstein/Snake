@@ -1,15 +1,20 @@
 #include <stdlib.h>
 #include <stdio.h>
+
+int checkWallCollision();
+
 const short bodyColor = (short) 0b0000011111100000;
 const short headColor = (short) 0b1111100000000000;
 const short foodColor = (short) 0b11111111111000000; //yellow
 const short backgroundColor = (short) (0b0000000000000111); //sorta blueish
+extern const short wallColor;
+
 extern volatile int currentDirection;
 
-volatile int foodXCoordinate;
-volatile int foodYCoordinate;
+int foodXCoordinate;
+int foodYCoordinate;
 extern volatile int counter;
-
+extern volatile int score;
 #if !defined(NEG_X) || !defined(POS_X) || !defined(NEG_Y) || !defined(POS_Y)
 	#define POS_X 1
 	#define NEG_X 2
@@ -78,7 +83,7 @@ void insertLink(struct Snake *top){
 		//NOTE A POSITIVE Y IS TECHNICALLY DOWN
 		top->firstNode->yPosition = (top->firstNode->yPosition + 2);
 	}else if (currentDirection == NEG_Y){
-		top->firstNode->yPosition = (top->firstNode->yPosition + -2);
+		top->firstNode->yPosition = (top->firstNode->yPosition -2);
 	}
 	fillSquare(top->firstNode->xPosition-1, top->firstNode->xPosition+1, top->firstNode->yPosition-1, top->firstNode->yPosition+1, headColor); //color the new head
 }
@@ -135,16 +140,17 @@ void move(struct Snake *top){
  * Function for generating a 1x1 food pixel
  */
 void generateFood(struct Snake *top){
+	printf("Food is redrawn\n");
 	int conflict = 1;
 	while (conflict){
 		conflict = 0;
-		//plus 1 is for wall offset
+		//plus 2 is for wall offset
 		foodXCoordinate = (rand() % 315) + 2;
 		foodYCoordinate = (rand() % 235) + 2;
 
 		//check for conflicts
 		for (struct Node *temp = top->firstNode; temp->next != 0; temp = temp->next){
-			if (temp->xPosition == foodXCoordinate && temp->yPosition == foodYCoordinate){
+			if ((temp->xPosition >= foodXCoordinate-2) && (temp->xPosition <= foodXCoordinate+2) && (temp->yPosition >= foodYCoordinate-2) && (temp->yPosition <= foodYCoordinate+2)){
 				//conflict
 				conflict = 1;
 				break;
@@ -166,7 +172,6 @@ void generateFood(struct Snake *top){
 	 //get to the end of the list
 	 while (currentLink->next !=0){
 		currentLink = currentLink->next;
-		printf("Stuck 1");
 	}
 	struct Node *temp; //temporay pointer that will store an additional link to prevent orphaning
 
@@ -174,40 +179,37 @@ void generateFood(struct Snake *top){
 	while(currentLink->previous !=0){
 		temp = currentLink; //set temporary pointer
 		temp = currentLink->previous; //go back one
-		fillSquare(currentLink->xPosition-1, currentLink->xPosition+1, currentLink->yPosition-1, currentLink->yPosition+1, backgroundColor); //set pixels back to regular
+		//fillSquare(currentLink->xPosition-1, currentLink->xPosition+1, currentLink->yPosition-1, currentLink->yPosition+1, backgroundColor); //set pixels back to regular
 		currentLink->next = 0;
 		currentLink->previous = 0;
 		//Dave you might want the snake to stay
 		free(currentLink); //delete the current one
 		currentLink = temp; //slide our tracking variable
-		printf("Stuck 2");
 	}
-	
+
 	//If I still want the head DO NOT EXECUTE THIS. Forcibly dumping all pointer references as C can retain these after I free the memory
-	fillSquare(currentLink->xPosition-1, currentLink->xPosition+1, currentLink->yPosition-1, currentLink->yPosition+1, backgroundColor); //set pixels back to regular
+	//fillSquare(currentLink->xPosition-1, currentLink->xPosition+1, currentLink->yPosition-1, currentLink->yPosition+1, backgroundColor); //set pixels back to regular
 	currentLink->next = 0;
 	currentLink->previous = 0;
 	top->firstNode->next = 0;
 	top->firstNode->previous =0;
 	free(top->firstNode);
-	printf("Stuck 3");
 	top->firstNode = 0;
 	currentLink->previous = 0;
-	printf("Stuck 5");
 	//Dave you might want the snake to stay
 	free(currentLink); //last link
-	printf("Stuck 4");
 	free(top); //dump the pointer at the head of the snake
 	printf("Game Complete\n");
+	buildWall(wallColor); //fix hole in the wall made by snake colliding and drawing over
+
 	finishGame();
  }
- 
- 
- 
- 
-extern volatile int score;
 
-int checkWallCollision();
+
+
+
+
+
 
 
 int checktokillSnake(){
@@ -215,7 +217,7 @@ int checktokillSnake(){
 	if (head == 0 || head->firstNode == 0){
 		return 1; //shit doesnt exist somthing wrong
 	}
-	
+
 	int currentXvalueOfHead = head->firstNode->xPosition;
 	int currentYvalueOfHead = head->firstNode->yPosition;
 	if(checkWallCollision()){
@@ -225,7 +227,7 @@ int checktokillSnake(){
 	/*to advance a list
 	set up node*/
 	//                                            list still has more stuff.     //advance where we are looking in the list
-	
+
 	//only have head exit
 	if (head->firstNode->next==0 || head->firstNode == 0 || head == 0){
 		return 0; //no fault
@@ -234,10 +236,10 @@ int checktokillSnake(){
 		//instantiate node as next thing after head
 		//get x and y value of the current node
 		int currentXvalueOfBody = node->xPosition;
-		int currentYvalueOfBody = node->yPosition;	
-			
+		int currentYvalueOfBody = node->yPosition;
+
 		//if the current node position equals the current positon of the snakes head, kill the snake
-		if (currentXvalueOfBody==currentXvalueOfHead && currentYvalueOfBody==currentYvalueOfHead){
+		if ((currentXvalueOfBody > currentXvalueOfHead -2) && (currentXvalueOfBody < currentXvalueOfHead +2) && (currentYvalueOfBody>currentYvalueOfHead-2) && (currentYvalueOfBody<currentYvalueOfHead+2)) {
 			//kill snake
 			deleteSnake(head);
 			return 1; //colllsion
@@ -250,7 +252,9 @@ void checkForFoodCollision(){
 	struct Node *top = head->firstNode;
 	int xMiddleOfHead = top->xPosition;
 	int yMiddleOfHead = top->yPosition;
-	if ((xMiddleOfHead >= foodXCoordinate-1) && (xMiddleOfHead <= foodXCoordinate+1) && (yMiddleOfHead >= foodYCoordinate-1) && (yMiddleOfHead <= foodYCoordinate+1)){
+	//check 5x5 box (really 3x3 but it doesnt run properly consistently)
+	if ((xMiddleOfHead >= foodXCoordinate-2) && (xMiddleOfHead <= foodXCoordinate+2) && (yMiddleOfHead >= foodYCoordinate-2) && (yMiddleOfHead <= foodYCoordinate+2)){
+		printf("Food collision\n");
 		//collision with food has occured
 		insertLink(head);
 		score++;
@@ -258,32 +262,29 @@ void checkForFoodCollision(){
 		generateFood(head);
 		//drawScore(67,2);
 		setScore();
+		if (score%5 == 0)
+		{
 		counter = counter - counter/10;
+	  }
 		volatile int * interval_timer_ptr = (int *) 0xFF202000; // interval timer base address
 		*(interval_timer_ptr + 0x2) = (counter & 0xFFFF);
 		*(interval_timer_ptr + 0x3) = (counter >> 16) & 0xFFFF;
 		/* start interval timer, enable its interrupts */
 		*(interval_timer_ptr + 1) = 0x7; // STOP = 0, START = 1, CONT = 1, ITO = 1
 	}
-	
+
 }
 
 int checkWallCollision(){
 	if (head == 0 || head->firstNode == 0){
 		return;
 	}
-	
+
 	if(head->firstNode->xPosition<=1 || head->firstNode->xPosition>=317 || head->firstNode->yPosition<=21 || head->firstNode->yPosition>=238){
 		//kill snake
-		printf("Walls break");
 		deleteSnake(head);
 		return 1;
 	}else {
 		return 0;
 	}
 }
-	
-	
-	
-
-

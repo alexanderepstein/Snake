@@ -8,7 +8,7 @@
 volatile int currentDirection;
 volatile int pushButtonThread = 0;
 extern volatile struct Snake *head;
-extern volatile int start, timerThread, welcome, playAgain;
+extern volatile int start, timerThread, welcome;
 int press;
 
 
@@ -20,18 +20,14 @@ int press;
 * variable KEY_PRESSED.
 ********************************************************************************/
 void pushbutton_ISR( void ) {
-
-	if (welcome ==1)
+	
+	if (welcome == 1)
 	{
+		clearText();
+		setInfoBar();
+		setScore();
 		welcome = 0;
-		initialization();
-
 		return;
-	}
-	else if (!start && playAgain)
-	{
-		welcomeScreen();
-		playAgain = 0;
 	}
 start =1;
 volatile int * KEY_ptr = (int *) 0xFF200050;
@@ -41,7 +37,7 @@ press= *(KEY_ptr + 3); // read the pushbutton interrupt register
 
 
 
-if (!timerThread && !pushButtonThread) //check if the timer isr is not running along with pushButtonThread
+if (!timerThread && !pushButtonThread) //check if the timer isr is not running along with pushButtonThread 
 {
 	pushButtonThread = 1; //set the push button isr thread to be running
 

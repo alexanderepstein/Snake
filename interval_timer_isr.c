@@ -22,7 +22,7 @@ void interval_timer_isr(){
 		
 		//Called when game needs to be replayed
 		if (playAgain && start){
-			printf("REINIT");
+			printf("REINIT\n");
 			playAgain = 0;
 			initialization();
 		}
