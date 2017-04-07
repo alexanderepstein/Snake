@@ -142,9 +142,9 @@ void generateFood(struct Snake *top){
 	int conflict = 1;
 	while (conflict){
 		conflict = 0;
-		//plus 2 is for wall offset
-		foodXCoordinate = (rand() % 315) + 2;
-		foodYCoordinate = (rand() % 235) + 2;
+		//plus 2 is for wall offset. Generate food particle fully within wall boundaries.
+		foodXCoordinate = (rand() % 315) + 1;
+		foodYCoordinate = (rand() % 215) + 22;
 
 		//check for conflicts
 		for (struct Node *temp = top->firstNode; temp->next != 0; temp = temp->next){
