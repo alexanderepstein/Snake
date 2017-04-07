@@ -56,7 +56,7 @@ if you can the direction will be changed, if not the isr will essentially do not
 */
 
 
-	if (press & 0x1) // KEY0
+	if (press & 0x1) // KEY0 (right)
 	{
 		if (currentDirection != 2)
 		{
@@ -65,7 +65,7 @@ if you can the direction will be changed, if not the isr will essentially do not
 
 	  }
 	}
-	else if (press & 0x2)
+	else if (press & 0x2) // KEY 1 (left)
 	{
 		if (currentDirection!= 1)
 		{
@@ -74,7 +74,7 @@ if you can the direction will be changed, if not the isr will essentially do not
 
 	  }
 	}
-	else if (press & 0x4) //KEY 2
+	else if (press & 0x4) //KEY 2 (down)
 	{
 		if (currentDirection!= 4)
 		{
@@ -83,7 +83,7 @@ if you can the direction will be changed, if not the isr will essentially do not
 
 	  }
 	}
-	else if(press & 0x8) //KEY 3
+	else if(press & 0x8) //KEY 3 (up)
 	{
 		if (currentDirection!= 3)
 		{

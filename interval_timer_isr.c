@@ -24,7 +24,6 @@ void interval_timer_isr(){
 	{
 
 		timerThread =1; //set timer thread to running
-		
 		//Called when game needs to be replayed
 		if (playAgain && start){
 			printf("REINIT\n");
@@ -32,21 +31,14 @@ void interval_timer_isr(){
 			initialization();
 		}
 		
-		if (start && head!=0 && !playAgain && welcome == 0) //check if the game has started
-		{
-		  //insertLink(head);
-		  if (!checktokillSnake()){
-			checkForFoodCollision();  
-			move(head); //move the snake
-		  }
-		 
+		//check if the game has started
+		if (start && head!=0 && !playAgain && welcome == 0){
+			if (!checktokillSnake()){
+				checkForFoodCollision();  
+				move(head); //move the snake
+			}
 		}
-
-
-
 		timerThread = 0; //set the timer thread to not running
 		return;
-
-	
 	}
 }

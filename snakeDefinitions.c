@@ -11,10 +11,11 @@
 
 int checkWallCollision();
 
-const short bodyColor = (short) 0b0000011111100000;
-const short headColor = (short) 0b1111100000000000;
+//constants for colors
+const short bodyColor = (short) 0b0000011111100000; //green
+const short headColor = (short) 0b1111100000000000; //red
 const short foodColor = (short) 0b11111111111000000; //yellow
-const short backgroundColor = (short) (0b0000000000000111); //sorta blueish
+const short backgroundColor = (short) (0b0000000000000111); //dark blue
 extern const short wallColor;
 
 extern volatile int currentDirection;
@@ -30,10 +31,12 @@ extern volatile int score;
 	#define NEG_Y 4
 #endif
 
-
 //setting up head here
 struct Snake *head;
 
+/**
+ * Set up initial node for snake structure. Called at beginning of game.
+ */
 void initSnake(){
 	 head = malloc(sizeof(struct Snake));
 	 //set up first node
@@ -59,9 +62,6 @@ void insertLink(struct Snake *top){
 	struct Node *newNode = malloc(sizeof(struct Node));
 	newNode->previous = top->firstNode; //new guy points back	1
 	newNode->next = top->firstNode->next; //new guy says the next thing is the link after the firstNode 2
-	if (newNode->next ==0){
-		printf("Properly set first iteration\n");
-	}
 	if (top->firstNode->next != 0){
 		top->firstNode->next->previous = newNode;// 3
 	}
@@ -156,7 +156,6 @@ void generateFood(struct Snake *top){
 		}
 	}
 	fillSquare(foodXCoordinate-1, foodXCoordinate+1, foodYCoordinate-1, foodYCoordinate+1, foodColor);
-
 }
 
 
@@ -186,7 +185,6 @@ void generateFood(struct Snake *top){
 	}
 
 	//If I still want the head DO NOT EXECUTE THIS. Forcibly dumping all pointer references as C can retain these after I free the memory
-	//fillSquare(currentLink->xPosition-1, currentLink->xPosition+1, currentLink->yPosition-1, currentLink->yPosition+1, backgroundColor); //set pixels back to regular
 	currentLink->next = 0;
 	currentLink->previous = 0;
 	top->firstNode->next = 0;
@@ -214,16 +212,13 @@ int checktokillSnake(){
 	int currentXvalueOfHead = head->firstNode->xPosition;
 	int currentYvalueOfHead = head->firstNode->yPosition;
 	if(checkWallCollision()){
-		//ie something has happened
+		//we collided so exit
 		return 1;
 	}
-	/*to advance a list
-	set up node*/
-	//                                            list still has more stuff.     //advance where we are looking in the list
 
 	//only have head exit
 	if (head->firstNode->next==0 || head->firstNode == 0 || head == 0){
-		return 0; //no fault
+		return 0; //no fault but some memory conflicts
 	}
 	for (struct Node *node = head->firstNode->next; node->next != 0; node = node->next){
 		//instantiate node as next thing after head
@@ -245,20 +240,18 @@ void checkForFoodCollision(){
 	struct Node *top = head->firstNode;
 	int xMiddleOfHead = top->xPosition;
 	int yMiddleOfHead = top->yPosition;
-	//check 5x5 box (really 3x3 but it doesnt run properly consistently)
+	//check to see if we have touched any of the food particle
 	if ((xMiddleOfHead >= foodXCoordinate-2) && (xMiddleOfHead <= foodXCoordinate+2) && (yMiddleOfHead >= foodYCoordinate-2) && (yMiddleOfHead <= foodYCoordinate+2)){
 		printf("Food collision\n");
 		//collision with food has occured
 		score++;
 		fillSquare(foodXCoordinate-1, foodXCoordinate+1, foodYCoordinate-1, foodYCoordinate+1, backgroundColor);
-		insertLink(head);
-		generateFood(head);
-		//drawScore(67,2);
+		insertLink(head); //make snake bigger
+		generateFood(head); //redraw food
 		setScore();
-		if (score%5 == 0)
-		{
-		counter = counter - counter/10;
-	  }
+		if (score%5 == 0){
+			counter = counter - counter/10;
+		}
 		volatile int * interval_timer_ptr = (int *) 0xFF202000; // interval timer base address
 		*(interval_timer_ptr + 0x2) = (counter & 0xFFFF);
 		*(interval_timer_ptr + 0x3) = (counter >> 16) & 0xFFFF;

@@ -20,19 +20,9 @@ int counter = 8000000; // 1/(100 MHz) × (5000000) = 50 msec
 extern int score;
 
 
-/********************************************************************************
-* This program demonstrates use of interrupts in the DE0-CV Computer. It first starts the
-* interval timer with 33 msec timeouts, and then enables interrupts from the interval timer
-* and pushbutton KEYs
-*
-* The interrupt service routine for the Altera interval timer displays a pattern on the HEX3-0
-* displays, and rotates this pattern either left or right:
-* KEY[0]: loads a new pattern from the SW switches
-* KEY[1]: rotates the displayed pattern to the right
-* KEY[2]: rotates the displayed pattern to the left
-* KEY[3]: stops the rotation
-********************************************************************************/
-
+/**
+ * Function that displays initial score of the game
+ */
 void setInfoBar()
 {
 	char snakeText[10] = "Snake\0";
@@ -41,6 +31,9 @@ void setInfoBar()
 	VGA_text(61, 2,scoreText);
 }
 
+/**
+ * Function that displays beginning of game text
+ */
 void welcomeScreen()
 {
 	char welcomeText[] = "Welcome to Snake!\0";
@@ -50,6 +43,9 @@ void welcomeScreen()
 	welcome = 1;
 }
 
+/**
+ * Initialize entire game including drawing starting positions, text, and score
+ */
 void initialization()
 {
 	score = 0;
