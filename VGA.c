@@ -1,5 +1,11 @@
-#include <stdio.h>
+#if !PRINT
+	#include <stdio.h>
+	#define PRINT
+#endif
 #include "nios2_ctrl_reg_macros.h"
+#if !PROTOTYPE
+	#include "prototypes.h"
+#endif
 extern volatile int score;
 
 #define ASCII_NUM_SHIFT 48

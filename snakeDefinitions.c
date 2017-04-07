@@ -1,5 +1,13 @@
 #include <stdlib.h>
-#include <stdio.h>
+#if !PRINT
+	#include <stdio.h>
+	#define PRINT
+#endif
+
+#if !PROTOTYPE
+	#include "prototypes.h"
+#endif
+
 
 int checkWallCollision();
 
@@ -21,17 +29,7 @@ extern volatile int score;
 	#define POS_Y 3
 	#define NEG_Y 4
 #endif
-struct Node{
-	int xPosition;
-	int yPosition;
-	struct Node *next;
-	struct Node *previous;
-	short color;
-};
 
-struct Snake{
-	struct Node *firstNode;
-};
 
 //setting up head here
 struct Snake *head;
@@ -76,14 +74,14 @@ void insertLink(struct Snake *top){
 
 	//can do preincrement / decrement for efficiency later on
 	if (currentDirection == POS_X){
-		top->firstNode->xPosition = (top->firstNode->xPosition + 2);
+		top->firstNode->xPosition = (top->firstNode->xPosition + 3);
 	}else if (currentDirection == NEG_X){
-		top->firstNode->xPosition = (top->firstNode->xPosition - 2);
+		top->firstNode->xPosition = (top->firstNode->xPosition - 3);
 	}else if (currentDirection == POS_Y){
 		//NOTE A POSITIVE Y IS TECHNICALLY DOWN
-		top->firstNode->yPosition = (top->firstNode->yPosition + 2);
+		top->firstNode->yPosition = (top->firstNode->yPosition + 3);
 	}else if (currentDirection == NEG_Y){
-		top->firstNode->yPosition = (top->firstNode->yPosition -2);
+		top->firstNode->yPosition = (top->firstNode->yPosition -3);
 	}
 	fillSquare(top->firstNode->xPosition-1, top->firstNode->xPosition+1, top->firstNode->yPosition-1, top->firstNode->yPosition+1, headColor); //color the new head
 }
@@ -122,15 +120,15 @@ void move(struct Snake *top){
 	}
 	//can do preincrement / decrement for efficiency later on
 	if (currentDirection == POS_X){
-		top->firstNode->xPosition = top->firstNode->xPosition + 2;
+		top->firstNode->xPosition = top->firstNode->xPosition + 3;
 	}else if (currentDirection == NEG_X){
-		top->firstNode->xPosition = top->firstNode->xPosition - 2;
+		top->firstNode->xPosition = top->firstNode->xPosition - 3;
 	}else if (currentDirection == POS_Y){
 		//NOTE A POSITIVE Y IS TECHNICALLY DOWN
-		top->firstNode->yPosition = top->firstNode->yPosition + 2;
+		top->firstNode->yPosition = top->firstNode->yPosition + 3;
 	}else if (currentDirection == NEG_Y){
 		//NOTE A NEGATIVE Y IS TECHNICALLY UP
-		top->firstNode->yPosition = top->firstNode->yPosition - 2;
+		top->firstNode->yPosition = top->firstNode->yPosition - 3;
 	}
 	//draw the new head position
 	fillSquare(top->firstNode->xPosition-1, top->firstNode->xPosition+1, top->firstNode->yPosition-1, top->firstNode->yPosition+1, headColor); //color the new head position
@@ -207,11 +205,6 @@ void generateFood(struct Snake *top){
 
 
 
-
-
-
-
-
 int checktokillSnake(){
 	//redundancy for faults
 	if (head == 0 || head->firstNode == 0){
@@ -239,7 +232,7 @@ int checktokillSnake(){
 		int currentYvalueOfBody = node->yPosition;
 
 		//if the current node position equals the current positon of the snakes head, kill the snake
-		if ((currentXvalueOfBody > currentXvalueOfHead -2) && (currentXvalueOfBody < currentXvalueOfHead +2) && (currentYvalueOfBody>currentYvalueOfHead-2) && (currentYvalueOfBody<currentYvalueOfHead+2)) {
+		if ((currentXvalueOfBody >= currentXvalueOfHead -2) && (currentXvalueOfBody <= currentXvalueOfHead +2) && (currentYvalueOfBody>=currentYvalueOfHead-2) && (currentYvalueOfBody<=currentYvalueOfHead+2)) {
 			//kill snake
 			deleteSnake(head);
 			return 1; //colllsion
@@ -256,9 +249,9 @@ void checkForFoodCollision(){
 	if ((xMiddleOfHead >= foodXCoordinate-2) && (xMiddleOfHead <= foodXCoordinate+2) && (yMiddleOfHead >= foodYCoordinate-2) && (yMiddleOfHead <= foodYCoordinate+2)){
 		printf("Food collision\n");
 		//collision with food has occured
-		insertLink(head);
 		score++;
 		fillSquare(foodXCoordinate-1, foodXCoordinate+1, foodYCoordinate-1, foodYCoordinate+1, backgroundColor);
+		insertLink(head);
 		generateFood(head);
 		//drawScore(67,2);
 		setScore();
@@ -277,7 +270,7 @@ void checkForFoodCollision(){
 
 int checkWallCollision(){
 	if (head == 0 || head->firstNode == 0){
-		return;
+		return 1;//head is null some fault exit
 	}
 
 	if(head->firstNode->xPosition<=1 || head->firstNode->xPosition>=317 || head->firstNode->yPosition<=21 || head->firstNode->yPosition>=238){

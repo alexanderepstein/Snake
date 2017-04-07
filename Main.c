@@ -1,5 +1,11 @@
 #include "nios2_ctrl_reg_macros.h"
-#include <stdio.h>
+#if !PRINT
+	#include <stdio.h>
+	#define PRINT
+#endif
+#if !PROTOTYPE
+	#include "prototypes.h"
+#endif
 /* key_pressed and pattern are written by interrupt service routines; we have to declare
 * these as volatile to avoid the compiler caching their values in registers */
 
@@ -8,7 +14,7 @@ volatile int currentDirection = 1;
 volatile int yPos = 120;
 volatile int start = 0, playAgain = 0;
 const short wallColor = (short) 0b1111100000000000;
-extern volatile struct Snake *head;
+extern struct Snake *head;
 volatile int welcome = 1;
 int counter = 6000000; // 1/(100 MHz) × (5000000) = 50 msec
 extern int score;
@@ -63,7 +69,7 @@ void initialization()
 	buildWall(wallColor);
 	setScore();
     initSnake();
-		for (int i =0; i <3; i++){
+		for (int i =0; i <30; i++){
 			insertLink(head);
 		}
 	generateFood(head);

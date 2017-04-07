@@ -1,12 +1,17 @@
-#include "stdio.h"
-
+#if !PRINT
+	#include <stdio.h>
+	#define PRINT
+#endif
+#if !PROTOTYPE
+	#include "prototypes.h"
+#endif
 
 extern volatile int yPos, currentDirection, start, pushButtonThread;
 /********************************************************************************
 * Interval timer interrupt service routine
 ********************************************************************************/
 volatile int timerThread = 0;
-extern volatile struct Snake *head;
+extern struct Snake *head;
 extern volatile int playAgain, welcome;
 
 

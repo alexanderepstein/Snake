@@ -1,4 +1,11 @@
-#include <stdio.h>
+#if !PRINT
+	#include <stdio.h>
+	#define PRINT
+#endif
+#if !PROTOTYPE
+	#include "prototypes.h"
+#endif
+
 #if !defined(NEG_X) || !defined(POS_X) || !defined(NEG_Y) || !defined(POS_Y)
 	#define POS_X 1
 	#define NEG_X 2
@@ -7,7 +14,7 @@
 #endif
 volatile int currentDirection;
 volatile int pushButtonThread = 0;
-extern volatile struct Snake *head;
+extern struct Snake *head;
 extern volatile int start, timerThread, welcome;
 int press;
 
