@@ -16,7 +16,7 @@ volatile int start = 0, playAgain = 0;
 const short wallColor = (short) 0b1111100000000000;
 extern struct Snake *head;
 volatile int welcome = 1;
-int counter = 6000000; // 1/(100 MHz) × (5000000) = 50 msec
+int counter = 8000000; // 1/(100 MHz) × (5000000) = 50 msec
 extern int score;
 
 
@@ -53,7 +53,7 @@ void welcomeScreen()
 void initialization()
 {
 	score = 0;
-	counter = 6000000;
+	counter = 8000000;
     volatile int * interval_timer_ptr = (int *) 0xFF202000; // interval timer base address
 
     /* set the interval timer period for iterating game */
@@ -69,7 +69,7 @@ void initialization()
 	buildWall(wallColor);
 	setScore();
     initSnake();
-		for (int i =0; i <30; i++){
+		for (int i =0; i <3; i++){
 			insertLink(head);
 		}
 	generateFood(head);
